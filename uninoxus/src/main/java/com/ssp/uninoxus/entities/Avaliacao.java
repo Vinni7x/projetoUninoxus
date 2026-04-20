@@ -1,5 +1,7 @@
 package com.ssp.uninoxus.entities;
 import java.time.LocalDate;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,15 +14,18 @@ public class Avaliacao {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idAvaliacao;
+	@Column(nullable = false)
     private String descricaoAvaliacao;
+	@Column(nullable = false)
     private LocalDate data;
-    private Double nota;
+	@Column(nullable = false) 
+    private Double nota; 
    
     @ManyToOne
-    @JoinColumn(name = "id_turma")  
-    private Turma turma;
+    @JoinColumn(name = "id_matricula", nullable = false)  
+    private Matricula matricula;
     
-    
+     
     public Avaliacao() {
 		
 	}
