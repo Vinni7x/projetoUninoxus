@@ -6,18 +6,17 @@ import java.util.List;
 import java.util.Set;
 
 import com.ssp.uninoxus.enumeration.DiasSemana;
-import com.ssp.uninoxus.enumeration.StatusMatricula;
 import com.ssp.uninoxus.enumeration.StatusTurma;
 import com.ssp.uninoxus.enumeration.Turno;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 
@@ -27,23 +26,29 @@ public class Turma {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long idTurma; 
+	private Long idTurma;
+	@Column( nullable = false) 
     private String semestre;
+	@Column( nullable = false) 
     private Turno turno;
+	@Column( nullable = false) 
     private LocalTime horarioInicio; 
+	@Column( nullable = false) 
     private LocalTime horarioFinal;
+	@Column( nullable = false) 
     private String local; 
+	@Column( nullable = false) 
     private Integer vagas;
+	@Column( nullable = false) 
     private List <DiasSemana> diasSemana = new ArrayList<>();;
-    private Double mediaFinal;
-    private Double frequencia;
+    @Column( nullable = false) 
     private StatusTurma statusTurma; 
-    private StatusMatricula statusMatricula;
-     
+    
     @ManyToOne
     @JoinColumn(name = "id_curso", nullable = false) 
     private Curso curso;  
     
+     
     @ManyToOne
     @JoinColumn(name = "id_disciplina", nullable = false) 
     private Disciplina disciplina;
@@ -52,17 +57,17 @@ public class Turma {
     @JoinColumn(name = "id_professor", nullable = false) 
     private Professor professor;
     
-    @ManyToMany
-	@JoinTable(name = "aluno_turma", joinColumns = @JoinColumn (name = "id_turma"), 
-	inverseJoinColumns = @JoinColumn (name = "id_aluno" ))  
-	private Set<Aluno> alunos = new HashSet<>();   
+    @OneToMany(mappedBy = "turma")
+	private Set<Matricula> matriculas = new HashSet<>(); 
+   
     
     
     public Turma () {}
 
-	public Turma(Long idTurma, String semestre, Turno turno, LocalTime horarioInicio, LocalTime horarioFinal,
-			String local, Integer vagas, Double mediaFinal, Double frequencia,
-			StatusTurma statusTurma, StatusMatricula statusMatricula, Curso curso, Professor professor, Disciplina disciplina) {
+	public Turma(Long idTurma, String semestre, Turno turno, LocalTime horarioInicio,
+			LocalTime horarioFinal,String local, Integer vagas, Double mediaFinal,
+			StatusTurma statusTurma, Curso curso, Professor professor, 
+			Disciplina disciplina, Set<Matricula> matriculas ) {
 		super();
 		this.idTurma = idTurma;
 		this.semestre = semestre;
@@ -71,16 +76,20 @@ public class Turma {
 		this.horarioFinal = horarioFinal;
 		this.local = local;
 		this.vagas = vagas;
-		this.mediaFinal = mediaFinal;
-		this.frequencia = frequencia;
 		this.statusTurma = statusTurma;
-		this.statusMatricula = statusMatricula;
 		this.curso = curso;
 		this.professor = professor;
 		this.disciplina = disciplina; 
+		this.matriculas = matriculas;
 	}
 
-	
+	public Set<Matricula> getMatriculas() {
+		return matriculas;
+	}
+
+	public void setMatriculas(Set<Matricula> matriculas) {
+		this.matriculas = matriculas;
+	}
 
 	public String getSemestre() {
 		return semestre;
@@ -138,22 +147,6 @@ public class Turma {
 		this.diasSemana = diasSemana; 
 	}
 
-	public Double getMediaFinal() {
-		return mediaFinal;
-	}
-
-	public void setMediaFinal(Double mediaFinal) {
-		this.mediaFinal = mediaFinal;
-	}
-
-	public Double getFrequencia() {
-		return frequencia;
-	}
-
-	public void setFrequencia(Double frequencia) {
-		this.frequencia = frequencia;
-	}
-
 	public StatusTurma getStatusTurma() {
 		return statusTurma;
 	}
@@ -162,13 +155,6 @@ public class Turma {
 		this.statusTurma = statusTurma;
 	}
 
-	public StatusMatricula getStatusMatricula() {
-		return statusMatricula;
-	}
-
-	public void setStatusMatricula(StatusMatricula statusMatricula) {
-		this.statusMatricula = statusMatricula;
-	}
 
 	public Long getIdTurma() {
 		return idTurma;
@@ -197,13 +183,5 @@ public class Turma {
 	public void setProfessor(Professor professor) {
 		this.professor = professor;
 	}
-
-	public Set<Aluno> getAluno() {
-		return alunos;
-	}
-
-	public void setAluno(Set<Aluno> alunos) {
-		this.alunos = alunos;  
-	} 
      
 }

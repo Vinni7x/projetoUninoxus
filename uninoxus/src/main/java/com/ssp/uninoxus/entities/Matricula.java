@@ -1,5 +1,9 @@
 package com.ssp.uninoxus.entities;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.ssp.uninoxus.enumeration.StatusMatricula;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
@@ -30,12 +35,15 @@ public class Matricula {
 	@JoinColumn(name = "id_turma", nullable = false)
 	private Turma turma;
 
+	@OneToMany(mappedBy="matricula")
+	private Set<Avaliacao> avaliacoes = new HashSet<>();
+
 	public Matricula() {
 		
 	}
 	
 	public Matricula(Long idMatricula, Double mediaFinal, Double frequencia, StatusMatricula statusMatricula,
-			Aluno aluno, Turma turma) {
+			Aluno aluno, Turma turma, Set<Avaliacao> avaliacoes ) {
 		
 		this.idMatricula = idMatricula;
 		this.mediaFinal = mediaFinal;
@@ -43,6 +51,7 @@ public class Matricula {
 		this.statusMatricula = statusMatricula;
 		this.aluno = aluno;
 		this.turma = turma;
+		this.avaliacoes = avaliacoes;
 	}
 
 	public Double getMediaFinal() {
@@ -89,6 +98,12 @@ public class Matricula {
 		return idMatricula;
 	}
 	
-	
+	public Set<Avaliacao> getAvaliacao() {
+		return avaliacoes;
+	}
+
+	public void setAvaliacao(Set<Avaliacao> avaliacoes) {
+		this.avaliacoes = avaliacoes;
+	}
 	
 }

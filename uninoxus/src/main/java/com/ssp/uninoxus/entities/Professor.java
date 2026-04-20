@@ -1,5 +1,7 @@
 package com.ssp.uninoxus.entities;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.ssp.uninoxus.enumeration.Titulacao;
 
@@ -7,8 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Professor extends Pessoa {
@@ -19,10 +21,14 @@ public class Professor extends Pessoa {
 	private Titulacao titulacao;
 	private String especializacao;
 	
-	@ManyToOne
-    @JoinColumn(name = "id_curso") 
-	private Curso curso;
 	
+	@OneToMany(mappedBy = "professor")
+	private Set<Turma> turmas = new HashSet<>();  
+	
+	@ManyToOne
+	private Curso curso;  
+
+
 	public Professor() {
 		super();
 		
@@ -30,11 +36,15 @@ public class Professor extends Pessoa {
 
 
 
-	public Professor(Long nomePessoa, String cpf, LocalDate dataNascimento, Long matriculaProfessor, Titulacao titulacao, String especializacao) {
+	public Professor(Long nomePessoa, String cpf, LocalDate dataNascimento, Long matriculaProfessor, 
+			Titulacao titulacao, String especializacao, Set<Turma> turmas, Curso curso) {
 		super(nomePessoa, cpf, dataNascimento);
 		this.matriculaProfessor = matriculaProfessor;
 		this.titulacao = titulacao;
 		this.especializacao = especializacao; 
+		this.turmas = turmas;
+		this.curso = curso;
+		
 	}
  
 
@@ -59,6 +69,27 @@ public class Professor extends Pessoa {
 		return matriculaProfessor;
 	}
 
+	public Set<Turma> getTurma() {
+		return turmas;
+	}
+
+
+
+	public void setTurma(Set<Turma> turmas) {
+		this.turmas = turmas;
+	} 
+
+
+
+	public Curso getCurso() {
+		return curso;
+	}
+
+
+
+	public void setCurso(Curso curso) {
+		this.curso = curso;
+	}
 	
 
 }

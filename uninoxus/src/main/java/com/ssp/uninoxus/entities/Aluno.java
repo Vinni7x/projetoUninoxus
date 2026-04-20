@@ -1,5 +1,7 @@
 package com.ssp.uninoxus.entities;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,21 +21,21 @@ public class Aluno extends Pessoa {
 	
 	@ManyToOne
 	@JoinColumn(name = "id_curso") 
-	private Curso curso; 
+	private Curso curso;  
 	
-	@OneToMany(mappedBy = "matricula")
-	private Matricula matricula; 
+	@OneToMany(mappedBy = "aluno")
+	private Set<Matricula> matriculas = new HashSet<>(); 
 	
 	public Aluno() {
 		
 	}
 
 	public Aluno(Long nomePessoa, String cpf, LocalDate dataNascimento, Long matriculaAluno, 
-			Double redimentoAcademico,Matricula matricula) {
+			Double redimentoAcademico,Set<Matricula> matriculas) {
 		super(nomePessoa, cpf, dataNascimento);
 		this.matriculaAluno = matriculaAluno;
 		this.redimentoAcademico = redimentoAcademico;
-		this.matricula = matricula;
+		this.matriculas = matriculas;
 	}
 
 	public Curso getCurso() {
@@ -44,12 +46,12 @@ public class Aluno extends Pessoa {
 		this.curso = curso;
 	}
 
-	public Matricula getMatricula() {
-		return matricula;
+	public Set<Matricula> getMatricula() {
+		return matriculas; 
 	}
 
-	public void setMatricula(Matricula matricula) {
-		this.matricula = matricula;
+	public void setMatricula(Set<Matricula> matriculas) {
+		this.matriculas = matriculas; 
 	}
 
 	public Double getRedimentoAcademico() {
