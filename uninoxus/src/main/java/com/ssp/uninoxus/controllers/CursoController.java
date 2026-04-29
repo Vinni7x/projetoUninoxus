@@ -23,6 +23,6 @@ public class CursoController {
 		List<Curso> lista = cursoService.findAll(); 
 		return ResponseEntity.ok(lista); 	
 	}
-	
+	 
 
 }

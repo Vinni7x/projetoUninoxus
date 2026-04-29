@@ -2,6 +2,7 @@ package com.ssp.uninoxus.entities;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssp.uninoxus.enums.StatusMatricula;
 
 import jakarta.persistence.Column;
@@ -29,9 +30,11 @@ public class Matricula {
 	@Column( nullable = false) 
 	private StatusMatricula statusMatricula;
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name = "id_aluno", nullable = false)
 	private Aluno aluno;
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name = "id_turma", nullable = false)
 	private Turma turma;
 

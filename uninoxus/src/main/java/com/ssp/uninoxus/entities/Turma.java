@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssp.uninoxus.enums.DiasSemana;
 import com.ssp.uninoxus.enums.StatusTurma;
 import com.ssp.uninoxus.enums.Turno;
@@ -45,19 +46,23 @@ public class Turma {
     private StatusTurma statusTurma; 
     
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "id_curso", nullable = false) 
     private Curso curso;  
     
      
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "id_disciplina", nullable = false) 
     private Disciplina disciplina;
     
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "id_professor", nullable = false) 
     private Professor professor;
     
     @OneToMany(mappedBy = "turma")
+    @JsonIgnore
 	private Set<Matricula> matriculas = new HashSet<>(); 
    
     

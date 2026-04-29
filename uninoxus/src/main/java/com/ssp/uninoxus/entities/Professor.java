@@ -3,6 +3,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssp.uninoxus.enums.Titulacao;
 
 import jakarta.persistence.Entity;
@@ -26,6 +27,7 @@ public class Professor extends Pessoa {
 	private Set<Turma> turmas = new HashSet<>();  
 	
 	@ManyToOne
+	@JsonIgnore
 	private Curso curso;  
 
 
@@ -36,7 +38,7 @@ public class Professor extends Pessoa {
 
 
 
-	public Professor(Long nomePessoa, String cpf, LocalDate dataNascimento, Long matriculaProfessor, 
+	public Professor(String nomePessoa, String cpf, LocalDate dataNascimento, Long matriculaProfessor, 
 			Titulacao titulacao, String especializacao, Set<Turma> turmas, Curso curso) {
 		super(nomePessoa, cpf, dataNascimento);
 		this.matriculaProfessor = matriculaProfessor;

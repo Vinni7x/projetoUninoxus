@@ -23,14 +23,14 @@ public class Usuario extends Pessoa {
 	@Column(nullable = false)
     private String Senha;
 	@Column(nullable = false) 
-    private Perfil perfil;
+    private Perfil perfil; 
     
     
 	public Usuario() {
 		
 	}
 	
-	public Usuario(Long nomePessoa, String cpf, LocalDate dataNascimento, 
+	public Usuario(String nomePessoa, String cpf, LocalDate dataNascimento, 
 			Long idUsuario, String email, String senha, Perfil perfil) {
 		
 		super(nomePessoa, cpf, dataNascimento);

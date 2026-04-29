@@ -3,6 +3,8 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,17 +22,19 @@ public class Aluno extends Pessoa {
 	private Double redimentoAcademico;
 	
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name = "id_curso") 
 	private Curso curso;  
 	
 	@OneToMany(mappedBy = "aluno")
+	@JsonIgnore
 	private Set<Matricula> matriculas = new HashSet<>(); 
 	
 	public Aluno() {
 		
 	}
 
-	public Aluno(Long nomePessoa, String cpf, LocalDate dataNascimento, Long matriculaAluno, 
+	public Aluno(String nomePessoa, String cpf, LocalDate dataNascimento, Long matriculaAluno, 
 			Double redimentoAcademico,Set<Matricula> matriculas) {
 		super(nomePessoa, cpf, dataNascimento);
 		this.matriculaAluno = matriculaAluno;

@@ -8,7 +8,7 @@ import jakarta.persistence.MappedSuperclass;
 @MappedSuperclass 
 public abstract class  Pessoa {
 	
-	private Long nomePessoa;
+	private String nomePessoa;
 	
 	private String cpf;
 	private LocalDate dataNascimento;  
@@ -17,18 +17,18 @@ public abstract class  Pessoa {
 		
 	}
 	
-	public Pessoa(Long nomePessoa, String cpf, LocalDate dataNascimento ) {
+	public Pessoa(String nomePessoa, String cpf, LocalDate dataNascimento ) {
 		super();
 		this.nomePessoa = nomePessoa;
 		this.cpf = cpf;
 		this.dataNascimento = dataNascimento;		
 	}
 
-	public Long getNomePessoa() {
+	public String getNomePessoa() {
 		return nomePessoa; 
 	}
 
-	public void setNomePessoa(Long nomePessoa) {
+	public void setNomePessoa(String nomePessoa) {
 		this.nomePessoa = nomePessoa;
 	}
 

@@ -2,6 +2,8 @@ package com.ssp.uninoxus.entities;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,6 +22,7 @@ public class Disciplina {
 	 private  Integer cargaHoraria; 
 	 
 	 @ManyToOne
+	 @JsonIgnore
 	 @JoinColumn(name = "id_curso") 
 	 private Curso curso;
 	 
