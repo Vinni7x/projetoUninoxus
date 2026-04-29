@@ -2,7 +2,7 @@ package com.ssp.uninoxus.entities;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.ssp.uninoxus.enumeration.StatusMatricula;
+import com.ssp.uninoxus.enums.StatusMatricula;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

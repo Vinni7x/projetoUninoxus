@@ -5,9 +5,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.ssp.uninoxus.enumeration.DiasSemana;
-import com.ssp.uninoxus.enumeration.StatusTurma;
-import com.ssp.uninoxus.enumeration.Turno;
+import com.ssp.uninoxus.enums.DiasSemana;
+import com.ssp.uninoxus.enums.StatusTurma;
+import com.ssp.uninoxus.enums.Turno;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

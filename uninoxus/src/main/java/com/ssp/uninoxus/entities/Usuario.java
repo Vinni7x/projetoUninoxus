@@ -1,7 +1,7 @@
 package com.ssp.uninoxus.entities;
 import java.time.LocalDate;
 
-import com.ssp.uninoxus.enumeration.Perfil;
+import com.ssp.uninoxus.enums.Perfil;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

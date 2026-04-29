@@ -3,7 +3,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.ssp.uninoxus.enumeration.Titulacao;
+import com.ssp.uninoxus.enums.Titulacao;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
