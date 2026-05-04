@@ -18,8 +18,8 @@ public class Avaliacao {
     private String descricaoAvaliacao;
 	@Column(nullable = false)
     private LocalDate data;
-	@Column(nullable = false) 
-    private Double nota; 
+	@Column
+	private Double nota = 0.0; 
    
     @ManyToOne
     @JoinColumn(name = "id_matricula", nullable = false)  
@@ -59,6 +59,14 @@ public class Avaliacao {
 
 	public void setNota(Double nota) {
 		this.nota = nota;
+	}
+
+	public Matricula getMatricula() {
+		return matricula;
+	}
+
+	public void setMatricula(Matricula matricula) {
+		this.matricula = matricula;
 	}
 
 	public Long getIdAvaliacao() {

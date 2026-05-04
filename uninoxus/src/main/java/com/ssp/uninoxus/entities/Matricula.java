@@ -35,7 +35,7 @@ public class Matricula {
 	private Aluno aluno;
 	@ManyToOne
 	@JsonIgnore
-	@JoinColumn(name = "id_turma", nullable = false)
+	@JoinColumn(name = "id_turma")
 	private Turma turma;
 
 	@OneToMany(mappedBy="matricula")
