@@ -7,6 +7,8 @@ import com.ssp.uninoxus.entities.Disciplina;
 
 @Repository
 public interface DisciplinaRepository extends JpaRepository <Disciplina, Long> {
+
+	boolean existsByNomeDisciplinaIgnoreCase(String nomeDisciplina);
  
 }
   

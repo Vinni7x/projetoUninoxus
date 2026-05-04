@@ -25,5 +25,18 @@ public class CursoService {
 		}
 			return Optional.empty(); 
 	}
+	
+	//analisar qual usar dps runTime ou Illegal
+	public Curso adicionar (Curso curso) {
+		
+		if(curso.getNomeCurso() == null || curso.getNomeCurso().isBlank()) {
+			throw new IllegalArgumentException ("O nome do curso não pode ser vazio");
+		}
+		if (cursoRepository.existsByNomeCursoIgnoreCase(curso.getNomeCurso())) { 
+			throw new RuntimeException ("Não foi possível adicionar: Curso com este nome já existe!");}
+		
+		return cursoRepository.save(curso); 
+		}
+	} 
 
-}
+

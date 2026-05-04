@@ -53,7 +53,7 @@ public class Aluno extends Pessoa {
 	public Set<Matricula> getMatricula() {
 		return matriculas; 
 	}
-
+ 
 	public void setMatricula(Set<Matricula> matriculas) {
 		this.matriculas = matriculas; 
 	}
@@ -69,5 +69,5 @@ public class Aluno extends Pessoa {
 	public Long getMatriculaAluno() {
 		return matriculaAluno;
 	}
-
+ 
 }
