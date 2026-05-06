@@ -19,9 +19,9 @@ public class Avaliacao {
 	@Column(nullable = false)
     private LocalDate data;
 	@Column
-	private Double nota = 0.0; 
-   
-    @ManyToOne
+	private Double nota; 
+    
+    @ManyToOne 
     @JoinColumn(name = "id_matricula", nullable = false)  
     private Matricula matricula;
     
