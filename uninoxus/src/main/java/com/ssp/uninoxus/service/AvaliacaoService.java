@@ -76,7 +76,16 @@ public class AvaliacaoService {
     	        lista.add(toDTO(a));  
     	    }
     	    return lista;
-    	}   
+    	}    
+    
+    
+    public void deletar (Long idAvaliacao ){
+    	
+    	if(idAvaliacao != null && avaliacaoRepository.existsById(idAvaliacao)){avaliacaoRepository.deleteById(idAvaliacao); }
+    	else {throw new IllegalArgumentException("Avaliação não encontrada, impossivel apagar!");}
+    	 
+    	  
+    } 
   
     private AvaliacaoResponseDTO toDTO(Avaliacao avaliacao) {
         return new AvaliacaoResponseDTO(

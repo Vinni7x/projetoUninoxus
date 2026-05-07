@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 	public record LancarNotaDTO(
 		    @NotNull @DecimalMin("0.0") @DecimalMax("10.0")
+		    @NotNull(message = "Nota não pode ser vazia!")
 		    Double nota
 		) {
 
