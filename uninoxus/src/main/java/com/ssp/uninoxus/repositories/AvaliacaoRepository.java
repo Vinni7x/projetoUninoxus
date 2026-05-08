@@ -12,4 +12,4 @@ public interface AvaliacaoRepository extends JpaRepository <Avaliacao, Long>{
 	List<Avaliacao> findAllByMatricula_IdMatricula(Long idMatricula);
 
 }
-
+ 

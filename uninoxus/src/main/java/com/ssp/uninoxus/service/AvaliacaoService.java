@@ -39,7 +39,7 @@ public class AvaliacaoService {
     }
 
 
-    public AvaliacaoResponseDTO update(CriarAvaliacaoDTO dto, Long idAvaliacao) {
+    public AvaliacaoResponseDTO update(Long idAvaliacao, CriarAvaliacaoDTO dto) {
         Avaliacao avaliacaoExistente = avaliacaoRepository.findById(idAvaliacao)
             .orElseThrow(() -> new IllegalArgumentException("Avaliação não encontrada!"));
 
@@ -50,7 +50,7 @@ public class AvaliacaoService {
         avaliacaoExistente.setData(dto.data());
         avaliacaoExistente.setMatricula(matricula);
 
-        avaliacaoRepository.save(avaliacaoExistente); 
+        avaliacaoRepository.save(avaliacaoExistente);  
         return toDTO(avaliacaoExistente);
     } 
 
@@ -77,12 +77,16 @@ public class AvaliacaoService {
     	    }
     	    return lista;
     	}    
-    
+     
     
     public void deletar (Long idAvaliacao ){
     	
-    	if(idAvaliacao != null && avaliacaoRepository.existsById(idAvaliacao)){avaliacaoRepository.deleteById(idAvaliacao); }
-    	else {throw new IllegalArgumentException("Avaliação não encontrada, impossivel apagar!");}
+    	if(idAvaliacao != null && avaliacaoRepository.existsById(idAvaliacao)){
+    		avaliacaoRepository.deleteById(idAvaliacao); 
+    		}
+    	else {
+    		throw new IllegalArgumentException("Avaliação não encontrada, impossivel apagar!");
+    		}
     	 
     	  
     } 

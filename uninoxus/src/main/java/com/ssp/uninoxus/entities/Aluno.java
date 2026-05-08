@@ -31,7 +31,7 @@ public class Aluno extends Pessoa {
 	private Set<Matricula> matriculas = new HashSet<>(); 
 	
 	public Aluno() {
-		
+		 
 	}
 
 	public Aluno(String nomePessoa, String cpf, LocalDate dataNascimento, Long matriculaAluno, 

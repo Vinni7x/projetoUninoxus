@@ -41,7 +41,7 @@ public class Turma {
 	@Column( nullable = false) 
     private Integer vagas;
 	@Column( nullable = false) 
-    private List <DiasSemana> diasSemana = new ArrayList<>();;
+    private List <DiasSemana> diasSemana = new ArrayList<>();
     @Column( nullable = false) 
     private StatusTurma statusTurma; 
     
