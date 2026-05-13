@@ -23,6 +23,7 @@ public record CriarTurmaDTO(
 	    @NotNull StatusTurma statusTurma,
 	    @NotNull Long idCurso,
 	    @NotNull Long idDisciplina,
-	    @NotNull Long MatriculaProfessor) {
+	    @NotNull Long matriculaProfessor) {
 
 }
+ 

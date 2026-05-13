@@ -50,8 +50,8 @@ public class AvaliacaoController {
 	@PatchMapping("/{idAvaliacao}/nota")
 	public ResponseEntity<AvaliacaoResponseDTO> lancaNota(
 	    @PathVariable Long idAvaliacao,
-	    @RequestBody @Valid LancarNotaDTO dto) {
-	    
+	    @RequestBody @Valid LancarNotaDTO dto) { 	
+	     
 	    return ResponseEntity.ok(avaliacaoService.lancaNota(idAvaliacao, dto));
 	}
 	
@@ -62,7 +62,7 @@ public class AvaliacaoController {
 			return ResponseEntity.noContent().build(); }
 			catch (RuntimeException e) {
 				return ResponseEntity.notFound().build();
-			}
+			} 
 			 
 		
 	}

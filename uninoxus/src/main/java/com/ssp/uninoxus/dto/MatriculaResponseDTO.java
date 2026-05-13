@@ -6,7 +6,5 @@ public record MatriculaResponseDTO(
 	    Long idMatricula,
 	    Double mediaFinal,
 	    Double frequencia,
-	    StatusMatricula statusMatricula,
-	    Long idAluno,
-	    Long idTurma
+	    StatusMatricula statusMatricula
 	) {} 

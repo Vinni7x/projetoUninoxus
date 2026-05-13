@@ -19,7 +19,7 @@ public class AlunoService {
 	}
 	
 	public Aluno adiconar (Aluno aluno) {
-		
+		 
 		return alunoRepository.save(aluno);
 	} 
  
