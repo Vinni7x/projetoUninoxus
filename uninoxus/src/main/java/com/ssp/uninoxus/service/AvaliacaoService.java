@@ -97,7 +97,8 @@ public class AvaliacaoService {
             avaliacao.getDescricaoAvaliacao(),
             avaliacao.getData(),
             avaliacao.getNota(),
-            avaliacao.getMatricula().getIdMatricula()
+            avaliacao.getMatricula().getIdMatricula(),
+            avaliacao.getTipoAvaliacao() 
         );
     }
     

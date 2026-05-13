@@ -44,7 +44,7 @@ public class Turma {
     private List <DiasSemana> diasSemana = new ArrayList<>();
     @Column( nullable = false) 
     private StatusTurma statusTurma; 
-    
+     
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "id_curso", nullable = false) 
@@ -70,7 +70,7 @@ public class Turma {
     public Turma () {}
 
 	public Turma(Long idTurma, String semestre, Turno turno, LocalTime horarioInicio,
-			LocalTime horarioFinal,String local, Integer vagas, Double mediaFinal,
+			LocalTime horarioFinal,String local, Integer vagas,
 			StatusTurma statusTurma, Curso curso, Professor professor, 
 			Disciplina disciplina, Set<Matricula> matriculas ) {
 		super();

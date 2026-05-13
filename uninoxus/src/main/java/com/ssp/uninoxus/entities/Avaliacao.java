@@ -1,6 +1,8 @@
 package com.ssp.uninoxus.entities;
 import java.time.LocalDate;
 
+import com.ssp.uninoxus.enums.TipoAvaliacao;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +22,9 @@ public class Avaliacao {
     private LocalDate data;
 	@Column
 	private Double nota; 
-    
+   
+	TipoAvaliacao tipoAvaliacao; 
+	
     @ManyToOne 
     @JoinColumn(name = "id_matricula", nullable = false)  
     private Matricula matricula;
@@ -73,9 +77,12 @@ public class Avaliacao {
 		return idAvaliacao;
 	}
 
-	
-    
-    
-    
+	public TipoAvaliacao getTipoAvaliacao() {
+		return tipoAvaliacao;
+	}
+
+	public void setTipoAvaliacao(TipoAvaliacao tipoAvaliacao) {
+		this.tipoAvaliacao = tipoAvaliacao;
+	}
 
 }
