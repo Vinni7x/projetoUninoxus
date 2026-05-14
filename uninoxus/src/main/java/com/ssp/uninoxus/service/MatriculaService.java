@@ -80,6 +80,8 @@ public class MatriculaService {
 	    matriculaRepository.save(matricula);
 	} 
 	
+	
+	
 	 public List<MatriculaResponseDTO> todasMatriculas(Long matriculaAluno) {
     	 List<Matricula> matriculas = matriculaRepository.findAllByAluno_MatriculaAluno(matriculaAluno);
     	     
@@ -90,15 +92,16 @@ public class MatriculaService {
     	    return lista; 
     	}    
 	
+	 
 	
 	 private MatriculaResponseDTO toDTO(Matricula matricula) {
 	        return new MatriculaResponseDTO(
 	            matricula.getIdMatricula(),
 	            matricula.getMediaFinal(),
 	            matricula.getFrequencia(),
-	            matricula.getStatusMatricula()
+	            matricula.getStatusMatricula() 
 	          
 	        );
 	    }
 
-}
+} 

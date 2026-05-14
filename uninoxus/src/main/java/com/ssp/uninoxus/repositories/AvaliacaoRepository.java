@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import com.ssp.uninoxus.entities.Avaliacao;
 import com.ssp.uninoxus.enums.TipoAvaliacao;
 
+import jakarta.validation.constraints.NotNull;
+
 
 @Repository
 public interface AvaliacaoRepository extends JpaRepository <Avaliacao, Long>{
@@ -17,6 +19,9 @@ public interface AvaliacaoRepository extends JpaRepository <Avaliacao, Long>{
     List<Avaliacao> findAllByMatricula_IdMatricula(Long idMatricula);
 
 	Optional<Avaliacao> findByMatricula_IdMatriculaAndTipoAvaliacao(Long idMatricula, TipoAvaliacao tipoAvaliacao);
+
+	boolean existsByMatricula_IdMatriculaAndTipoAvaliacao(@NotNull Long idMatricula,
+			@NotNull TipoAvaliacao tipoAvaliacao);
 
 }
  

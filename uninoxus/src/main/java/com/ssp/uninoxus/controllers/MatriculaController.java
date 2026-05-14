@@ -38,7 +38,7 @@ public class MatriculaController {
 	
 	@PostMapping
 	public ResponseEntity<MatriculaResponseDTO> adicionar (@RequestBody @Valid CriarMatriculaDTO dto){
-		return ResponseEntity.status(201).body(matriculaService.adicionar(dto));
+		return ResponseEntity.status(201).body(matriculaService.adicionar(dto)); 
 	}
 	 
 	@PatchMapping("/{idMatricula}/cancelar")

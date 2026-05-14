@@ -27,9 +27,20 @@ public class AvaliacaoService {
     public AvaliacaoResponseDTO adicionar(CriarAvaliacaoDTO dto) {
         Matricula matricula = matriculaRepository.findById(dto.idMatricula())
             .orElseThrow(() -> new IllegalArgumentException("Matrícula não encontrada!"));
+        
+        boolean jaExiste = avaliacaoRepository.existsByMatricula_IdMatriculaAndTipoAvaliacao(
+                dto.idMatricula(), 
+                dto.tipoAvaliacao()
+            );
 
+            if (jaExiste) {
+                throw new IllegalArgumentException(
+                    "O aluno já possui uma avaliação do tipo " + dto.tipoAvaliacao() + " cadastrada!"
+                );
+            }
         Avaliacao avaliacao = new Avaliacao();
         avaliacao.setDescricaoAvaliacao(dto.descricaoAvaliacao());
+        avaliacao.setTipoAvaliacao(dto.tipoAvaliacao()); 
         avaliacao.setData(dto.data());
         avaliacao.setMatricula(matricula);
       
@@ -66,7 +77,7 @@ public class AvaliacaoService {
         avaliacaoExistente.setNota(dto.nota());
         avaliacaoRepository.save(avaliacaoExistente);
         return toDTO(avaliacaoExistente);
-    } 
+    }  
     
     public List<AvaliacaoResponseDTO> todasProvas(Long idMatricula) {
     	 List<Avaliacao> avaliacoes = avaliacaoRepository.findAllByMatricula_IdMatricula(idMatricula);
