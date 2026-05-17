@@ -23,7 +23,7 @@ public class Aluno extends Pessoa {
 	
 	@ManyToOne
 	@JsonIgnore
-	@JoinColumn(name = "id_curso") 
+	@JoinColumn(name = "id_curso")  
 	private Curso curso;  
 	
 	@OneToMany(mappedBy = "aluno")

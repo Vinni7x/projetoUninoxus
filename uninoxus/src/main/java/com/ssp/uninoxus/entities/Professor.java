@@ -32,15 +32,14 @@ public class Professor extends Pessoa {
 
 
 	public Professor() {
-		super();
 		
 	}
-
+ 
 
 
 	public Professor(String nomePessoa, String cpf, LocalDate dataNascimento, Long matriculaProfessor, 
 			Titulacao titulacao, String especializacao, Set<Turma> turmas, Curso curso) {
-		super(nomePessoa, cpf, dataNascimento);
+		super(nomePessoa, cpf, dataNascimento); 
 		this.matriculaProfessor = matriculaProfessor;
 		this.titulacao = titulacao;
 		this.especializacao = especializacao; 
@@ -71,18 +70,6 @@ public class Professor extends Pessoa {
 		return matriculaProfessor;
 	}
 
-	public Set<Turma> getTurma() {
-		return turmas;
-	}
-
-
-
-	public void setTurma(Set<Turma> turmas) {
-		this.turmas = turmas;
-	} 
-
-
-
 	public Curso getCurso() {
 		return curso;
 	}
@@ -92,6 +79,18 @@ public class Professor extends Pessoa {
 	public void setCurso(Curso curso) {
 		this.curso = curso;
 	}
-	
 
+
+
+	public Set<Turma> getTurmas() {
+		return turmas;
+	}
+
+
+
+	public void setTurmas(Set<Turma> turmas) {
+		this.turmas = turmas;
+	}
+
+ 
 }

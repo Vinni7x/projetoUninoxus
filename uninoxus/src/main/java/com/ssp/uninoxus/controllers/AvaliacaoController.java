@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssp.uninoxus.dto.AvaliacaoResponseDTO;
 import com.ssp.uninoxus.dto.CriarAvaliacaoDTO;
-import com.ssp.uninoxus.dto.LancarNotaDTO;
 import com.ssp.uninoxus.service.AvaliacaoService;
 
 import jakarta.validation.Valid;
@@ -28,12 +26,12 @@ public class AvaliacaoController {
 	@Autowired 
 	private AvaliacaoService avaliacaoService;
 	
-	@GetMapping("/{idMatricula}")
+/*	@GetMapping("/{idMatricula}")
 	public  ResponseEntity<List<AvaliacaoResponseDTO>> todasProvas(@PathVariable Long idMatricula){
 		List<AvaliacaoResponseDTO> lista = avaliacaoService.todasProvas(idMatricula);
 		return ResponseEntity.status(200).body(lista);  
 		 
-	}
+	}*/
 	
 	@PostMapping 
     public ResponseEntity<AvaliacaoResponseDTO> insert (@RequestBody @Valid CriarAvaliacaoDTO dto){ 
@@ -47,13 +45,6 @@ public class AvaliacaoController {
 		 return ResponseEntity.ok(avaliacaoService.update(idAvaliacao, dto));
 	}
 	
-	@PatchMapping("/{idAvaliacao}/nota")
-	public ResponseEntity<AvaliacaoResponseDTO> lancaNota(
-	    @PathVariable Long idAvaliacao,
-	    @RequestBody @Valid LancarNotaDTO dto) { 	
-	     
-	    return ResponseEntity.ok(avaliacaoService.lancaNota(idAvaliacao, dto));
-	}
 	
 	@DeleteMapping( "/{idAvaliacao}")  
 	public  ResponseEntity <Void> deletar (@PathVariable Long idAvaliacao ){

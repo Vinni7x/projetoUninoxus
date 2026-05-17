@@ -1,18 +1,19 @@
 package com.ssp.uninoxus.service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssp.uninoxus.dto.AvaliacaoResponseDTO;
 import com.ssp.uninoxus.dto.CriarAvaliacaoDTO;
-import com.ssp.uninoxus.dto.LancarNotaDTO;
 import com.ssp.uninoxus.entities.Avaliacao;
-import com.ssp.uninoxus.entities.Matricula;
+import com.ssp.uninoxus.entities.Turma;
 import com.ssp.uninoxus.repositories.AvaliacaoRepository;
 import com.ssp.uninoxus.repositories.MatriculaRepository;
+import com.ssp.uninoxus.repositories.NotaRepository;
+import com.ssp.uninoxus.repositories.TurmaRepository;
 
 @Service
 public class AvaliacaoService {
@@ -21,96 +22,81 @@ public class AvaliacaoService {
     private AvaliacaoRepository avaliacaoRepository;
 
     @Autowired
+    private NotaRepository notaRepository;
+
+    @Autowired
+    private TurmaRepository turmaRepository;
+
+    @Autowired
     private MatriculaRepository matriculaRepository;
 
- 
+  
     public AvaliacaoResponseDTO adicionar(CriarAvaliacaoDTO dto) {
-        Matricula matricula = matriculaRepository.findById(dto.idMatricula())
-            .orElseThrow(() -> new IllegalArgumentException("Matrícula não encontrada!"));
-        
-        boolean jaExiste = avaliacaoRepository.existsByMatricula_IdMatriculaAndTipoAvaliacao(
-                dto.idMatricula(), 
-                dto.tipoAvaliacao()
+        Turma turma = turmaRepository.findById(dto.idTurma())
+            .orElseThrow(() -> new IllegalArgumentException("Turma não encontrada!"));
+
+        boolean jaExiste = avaliacaoRepository.existsByTurma_IdTurmaAndTipoAvaliacao( 
+            dto.idTurma(),
+            dto.tipoAvaliacao() 
+        );
+        if (jaExiste) {
+            throw new IllegalArgumentException(
+                "Já existe uma avaliação do tipo " + dto.tipoAvaliacao() + " para essa turma!"
             );
-
-            if (jaExiste) {
-                throw new IllegalArgumentException(
-                    "O aluno já possui uma avaliação do tipo " + dto.tipoAvaliacao() + " cadastrada!"
-                );
-            }
-        Avaliacao avaliacao = new Avaliacao();
-        avaliacao.setDescricaoAvaliacao(dto.descricaoAvaliacao());
-        avaliacao.setTipoAvaliacao(dto.tipoAvaliacao()); 
-        avaliacao.setData(dto.data());
-        avaliacao.setMatricula(matricula);
-      
-
-        avaliacaoRepository.save(avaliacao);
-        return toDTO(avaliacao); 
-    }
-
-
-    public AvaliacaoResponseDTO update(Long idAvaliacao, CriarAvaliacaoDTO dto) {
-        Avaliacao avaliacaoExistente = avaliacaoRepository.findById(idAvaliacao)
-            .orElseThrow(() -> new IllegalArgumentException("Avaliação não encontrada!"));
-
-        Matricula matricula = matriculaRepository.findById(dto.idMatricula())
-            .orElseThrow(() -> new IllegalArgumentException("Matrícula não encontrada!"));
-
-        avaliacaoExistente.setDescricaoAvaliacao(dto.descricaoAvaliacao());
-        avaliacaoExistente.setData(dto.data());
-        avaliacaoExistente.setMatricula(matricula);
-
-        avaliacaoRepository.save(avaliacaoExistente);  
-        return toDTO(avaliacaoExistente);
-    } 
-
-
-    public AvaliacaoResponseDTO lancaNota(Long idAvaliacao, LancarNotaDTO dto) {
-        if (dto.nota() == null) {
-            throw new IllegalArgumentException("Nota não pode ser vazia!");
         }
 
-        Avaliacao avaliacaoExistente = avaliacaoRepository.findById(idAvaliacao)
+        Avaliacao avaliacao = new Avaliacao();
+        avaliacao.setDescricaoAvaliacao(dto.descricaoAvaliacao());
+        avaliacao.setTipoAvaliacao(dto.tipoAvaliacao());
+        avaliacao.setData(dto.data());
+        avaliacao.setTurma(turma);
+
+        avaliacaoRepository.save(avaliacao);
+        return toDTO(avaliacao);
+    }
+
+    public AvaliacaoResponseDTO update(Long idAvaliacao, CriarAvaliacaoDTO dto) {
+        Avaliacao avaliacao = avaliacaoRepository.findById(idAvaliacao) 
             .orElseThrow(() -> new IllegalArgumentException("Avaliação não encontrada!"));
 
-        avaliacaoExistente.setNota(dto.nota());
-        avaliacaoRepository.save(avaliacaoExistente);
-        return toDTO(avaliacaoExistente);
-    }  
-    
-    public List<AvaliacaoResponseDTO> todasProvas(Long idMatricula) {
-    	 List<Avaliacao> avaliacoes = avaliacaoRepository.findAllByMatricula_IdMatricula(idMatricula);
-    	    
-    	    List<AvaliacaoResponseDTO> lista = new ArrayList<>();
-    	    for (Avaliacao a : avaliacoes) {
-    	        lista.add(toDTO(a));  
-    	    }
-    	    return lista;
-    	}    
-     
-    
-    public void deletar (Long idAvaliacao ){
-    	
-    	if(idAvaliacao != null && avaliacaoRepository.existsById(idAvaliacao)){
-    		avaliacaoRepository.deleteById(idAvaliacao); 
-    		}
-    	else {
-    		throw new IllegalArgumentException("Avaliação não encontrada, impossivel apagar!");
-    		}
-    	 
-    	  
-    } 
-  
+        Turma turma = turmaRepository.findById(dto.idTurma())
+            .orElseThrow(() -> new IllegalArgumentException("Turma não encontrada!"));
+
+        avaliacao.setDescricaoAvaliacao(dto.descricaoAvaliacao());
+        avaliacao.setData(dto.data());
+        avaliacao.setTurma(turma);
+
+        avaliacaoRepository.save(avaliacao);
+        return toDTO(avaliacao);
+    }
+
+    public List<AvaliacaoResponseDTO> todasAvaliacoesDaTurma(Long idTurma) {
+        turmaRepository.findById(idTurma)
+            .orElseThrow(() -> new IllegalArgumentException("Turma não encontrada!"));
+
+        return avaliacaoRepository.findAllByTurma_IdTurma(idTurma)
+            .stream()
+            .map(this::toDTO)
+            .collect(Collectors.toList());
+    }
+
+
+    public void deletar(Long idAvaliacao) {
+        if (!avaliacaoRepository.existsById(idAvaliacao)) {
+            throw new IllegalArgumentException("Avaliação não encontrada, impossível apagar!");
+        }
+        avaliacaoRepository.deleteById(idAvaliacao);
+    }
+
     private AvaliacaoResponseDTO toDTO(Avaliacao avaliacao) {
         return new AvaliacaoResponseDTO(
-            avaliacao.getIdAvaliacao(),
+           
             avaliacao.getDescricaoAvaliacao(),
-            avaliacao.getData(),
-            avaliacao.getNota(),
-            avaliacao.getMatricula().getIdMatricula(),
-            avaliacao.getTipoAvaliacao() 
-        );
+            avaliacao.getData(), 
+            avaliacao.getTipoAvaliacao(),
+            avaliacao.getTurma().getDisciplina().getNomeDisciplina()
+          
+            
+        );  
     }
-    
 }

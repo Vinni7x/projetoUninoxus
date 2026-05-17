@@ -1,15 +1,21 @@
 package com.ssp.uninoxus.entities;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssp.uninoxus.enums.TipoAvaliacao;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Avaliacao {
@@ -20,25 +26,31 @@ public class Avaliacao {
     private String descricaoAvaliacao;
 	@Column(nullable = false)
     private LocalDate data;
-	@Column
-	private Double nota; 
-   
+	@Enumerated(EnumType.STRING)
 	TipoAvaliacao tipoAvaliacao; 
 	
     @ManyToOne 
-    @JoinColumn(name = "id_matricula", nullable = false)  
-    private Matricula matricula;
+    @JoinColumn(name = "id_turma", nullable = false)  
+    private Turma turma;
     
-     
-    public Avaliacao() {
-		
-	}
+    @OneToMany(mappedBy = "avaliacao")
+    @JsonIgnore
+	private Set<Nota> notas = new HashSet<>(); 
+   
 
-	public Avaliacao(Long idAvaliacao, String descricaoAvaliacao, LocalDate data, Double nota) {
+	public Avaliacao(Long idAvaliacao, String descricaoAvaliacao, LocalDate data, TipoAvaliacao tipoAvaliacao,
+			Turma turma, Set<Nota> notas) {
+	
 		this.idAvaliacao = idAvaliacao;
 		this.descricaoAvaliacao = descricaoAvaliacao;
 		this.data = data;
-		this.nota = nota;
+		this.tipoAvaliacao = tipoAvaliacao;
+		this.turma = turma;
+		this.notas = notas;
+	}
+
+	public Avaliacao() {
+	
 	}
 
 	public String getDescricaoAvaliacao() {
@@ -57,22 +69,6 @@ public class Avaliacao {
 		this.data = data;
 	}
 
-	public Double getNota() {
-		return nota;
-	}
-
-	public void setNota(Double nota) {
-		this.nota = nota;
-	}
-
-	public Matricula getMatricula() {
-		return matricula;
-	}
-
-	public void setMatricula(Matricula matricula) {
-		this.matricula = matricula;
-	}
-
 	public Long getIdAvaliacao() {
 		return idAvaliacao;
 	}
@@ -83,6 +79,24 @@ public class Avaliacao {
 
 	public void setTipoAvaliacao(TipoAvaliacao tipoAvaliacao) {
 		this.tipoAvaliacao = tipoAvaliacao;
+	}
+
+
+	public Turma getTurma() {
+		return turma;
+	}
+
+
+	public void setTurma(Turma turma) {
+		this.turma = turma;
+	}
+
+	public Set<Nota> getNotas() {
+		return notas;
+	}
+
+	public void setNotas(Set<Nota> notas) {
+		this.notas = notas;
 	}
 
 }

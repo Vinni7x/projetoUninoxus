@@ -26,11 +26,11 @@ public class AlunoController {
 		List<Aluno> lista = alunoService.findAll(); 
 		return ResponseEntity.ok(lista);}
 
-	@PostMapping 
+	/*@PostMapping 
     public ResponseEntity<Aluno> insert (@RequestBody Aluno aluno){ 
 		
 		 aluno = alunoService.adiconar(aluno);  
-		 return ResponseEntity.status(201).body(aluno); } 
+		 return ResponseEntity.status(201).body(aluno); } */
 	
 	
 	

@@ -1,6 +1,7 @@
 package com.ssp.uninoxus.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.ssp.uninoxus.dto.CriarTurmaDTO;
 import com.ssp.uninoxus.dto.TurmaResponseDTO;
 import com.ssp.uninoxus.entities.Curso;
@@ -12,7 +13,6 @@ import com.ssp.uninoxus.enums.StatusMatricula;
 import com.ssp.uninoxus.enums.StatusTurma;
 import com.ssp.uninoxus.repositories.CursoRepository;
 import com.ssp.uninoxus.repositories.DisciplinaRepository;
-import com.ssp.uninoxus.repositories.MatriculaRepository;
 import com.ssp.uninoxus.repositories.ProfessorRepository;
 import com.ssp.uninoxus.repositories.TurmaRepository;
 
@@ -22,7 +22,7 @@ public class TurmaService {
     @Autowired
     private TurmaRepository turmaRepository;
     @Autowired
-    private MatriculaRepository matriculaRepository;
+    private MatriculaService matriculaService;
     @Autowired
     private CursoRepository cursoRepository;
     @Autowired
@@ -90,12 +90,14 @@ public class TurmaService {
         }
 
         for (Matricula matricula : turma.getMatriculas()) {
-            if (matricula.getStatusMatricula() != StatusMatricula.MATRICULADO) {
-                continue; // ignora canceladas
+            if (matricula.getStatusMatricula() == StatusMatricula.MATRICULADO) {
+                boolean valido = matriculaService.validarAvaliacoesNotasParaConsolidacao(matricula.getIdMatricula());
+                if (!valido) {
+                    throw new IllegalArgumentException(
+                        "Aluno " + matricula.getAluno().getMatriculaAluno() + " possui notas pendentes!"
+                    );
+                }
             }
-
-           
-            matriculaRepository.save(matricula);
         }
 
         turma.setStatusTurma(StatusTurma.CONSOLIDADA);

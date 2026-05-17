@@ -7,6 +7,8 @@ import com.ssp.uninoxus.enums.StatusMatricula;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,7 +29,8 @@ public class Matricula {
 	private Double mediaFinal;
 	@Column( nullable = false) 
 	private Double frequencia;
-	@Column( nullable = false) 
+	@Column( nullable = false)
+	@Enumerated(EnumType.STRING)
 	private StatusMatricula statusMatricula;
 	@ManyToOne
 	@JsonIgnore
@@ -39,14 +42,14 @@ public class Matricula {
 	private Turma turma;
 
 	@OneToMany(mappedBy="matricula")
-	private Set<Avaliacao> avaliacoes = new HashSet<>();
+	private Set<Nota> notas = new HashSet<>();
 
 	public Matricula() {
 		
 	}
 	
 	public Matricula(Long idMatricula, Double mediaFinal, Double frequencia, StatusMatricula statusMatricula,
-			Aluno aluno, Turma turma, Set<Avaliacao> avaliacoes ) {
+			Aluno aluno, Turma turma, Set<Nota> notas ) {
 		
 		this.idMatricula = idMatricula;
 		this.mediaFinal = mediaFinal;
@@ -54,7 +57,7 @@ public class Matricula {
 		this.statusMatricula = statusMatricula;
 		this.aluno = aluno;
 		this.turma = turma;
-		this.avaliacoes = avaliacoes;
+		this.notas = notas;
 	}
 
 	public Double getMediaFinal() {
@@ -101,12 +104,12 @@ public class Matricula {
 		return idMatricula;
 	}
 	
-	public Set<Avaliacao> getAvaliacao() {
-		return avaliacoes;
+	public Set<Nota> getAvaliacao() {
+		return notas;
 	}
 
-	public void setAvaliacao(Set<Avaliacao> avaliacoes) {
-		this.avaliacoes = avaliacoes;
+	public void setAvaliacao(Set<Nota> notas) {
+		this.notas = notas;
 	}
 	
 }

@@ -7,6 +7,8 @@ import com.ssp.uninoxus.entities.Professor;
 
 @Repository
 public interface ProfessorRepository extends JpaRepository <Professor, Long>{
+
+	boolean existsByCpf(String cpf);
 	 
 	
 }

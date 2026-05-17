@@ -12,6 +12,8 @@ import com.ssp.uninoxus.enums.Turno;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -43,6 +45,7 @@ public class Turma {
 	@Column( nullable = false) 
     private List <DiasSemana> diasSemana = new ArrayList<>();
     @Column( nullable = false) 
+	@Enumerated(EnumType.STRING)
     private StatusTurma statusTurma; 
      
     @ManyToOne
@@ -65,15 +68,16 @@ public class Turma {
     @JsonIgnore
 	private Set<Matricula> matriculas = new HashSet<>(); 
    
+    @OneToMany(mappedBy = "turma")
+    @JsonIgnore 
+	private Set<Avaliacao> avaliacoes = new HashSet<>(); 
     
-    
-    public Turma () {}
+   
 
-	public Turma(Long idTurma, String semestre, Turno turno, LocalTime horarioInicio,
-			LocalTime horarioFinal,String local, Integer vagas,
-			StatusTurma statusTurma, Curso curso, Professor professor, 
-			Disciplina disciplina, Set<Matricula> matriculas ) {
-		super();
+	public Turma(Long idTurma, String semestre, Turno turno, LocalTime horarioInicio, LocalTime horarioFinal,
+			String local, Integer vagas, List<DiasSemana> diasSemana, StatusTurma statusTurma, Curso curso,
+			Disciplina disciplina, Professor professor, Set<Matricula> matriculas, Set<Avaliacao> avaliacoes) {
+	
 		this.idTurma = idTurma;
 		this.semestre = semestre;
 		this.turno = turno;
@@ -81,12 +85,19 @@ public class Turma {
 		this.horarioFinal = horarioFinal;
 		this.local = local;
 		this.vagas = vagas;
+		this.diasSemana = diasSemana;
 		this.statusTurma = statusTurma;
 		this.curso = curso;
+		this.disciplina = disciplina;
 		this.professor = professor;
-		this.disciplina = disciplina; 
 		this.matriculas = matriculas;
+		this.avaliacoes = avaliacoes;
 	}
+	
+	public Turma() {
+	}
+
+
 
 	public Set<Matricula> getMatriculas() {
 		return matriculas;
@@ -188,5 +199,14 @@ public class Turma {
 	public void setProfessor(Professor professor) {
 		this.professor = professor;
 	}
+
+	public Set<Avaliacao> getAvaliacoes() {
+		return avaliacoes;
+	}
+
+	public void setAvaliacoes(Set<Avaliacao> avaliacoes) {
+		this.avaliacoes = avaliacoes;
+	}
+	
      
 }

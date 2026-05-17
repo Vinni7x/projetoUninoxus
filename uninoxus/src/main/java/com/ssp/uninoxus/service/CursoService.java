@@ -16,8 +16,12 @@ public class CursoService {
 	
 	
 	public CursoResponseDTO adicionar (CriarCursoDTO dto) {
-		
-		 Curso curso = new Curso();
+		   boolean cursoJaExiste = cursoRepository.existsByNomeCursoIgnoreCase(dto.nomeCurso());
+		   if (cursoJaExiste) {
+			    throw new IllegalArgumentException("Esse curso já existe!");
+			} 
+	
+		 Curso curso = new Curso(); 
 	        curso.setNomeCurso(dto.nomeCurso());
 	        curso.setCargaHorariaTotal(dto.cargaHorariaTotal());
 	      
@@ -32,13 +36,18 @@ public class CursoService {
 		   Curso cursoExistente = cursoRepository.findById(idCurso)
 		            .orElseThrow(() -> new IllegalArgumentException("Curso não encontrada!"));
 		   
+		   if (!cursoExistente.getNomeCurso().equalsIgnoreCase(dto.nomeCurso())) {
+			   boolean nomeJaExiste = cursoRepository.existsByNomeCursoIgnoreCase(dto.nomeCurso());
+		        if (nomeJaExiste) {
+		            throw new IllegalArgumentException("Já existe outro curso cadastrado com este nome!");
+		        }
+		   }
+		   
 		   cursoExistente.setNomeCurso(dto.nomeCurso());
 		   cursoExistente.setCargaHorariaTotal(dto.cargaHorariaTotal()); 
 
 	        cursoRepository.save(cursoExistente); 
-	        return toDTO(cursoExistente);
-		  
-		 
+	        return toDTO(cursoExistente);	  
 	 }
 	
 	 private CursoResponseDTO toDTO(Curso curso) {
