@@ -19,7 +19,8 @@ public record CriarTurmaDTO(
 	    @NotNull LocalTime horarioFinal,
 	    @NotBlank String local,
 	    @Min(1) Integer vagas,
-	    @NotEmpty List<DiasSemana> diasSemana,
+	    @NotEmpty(message = "Selecione pelo menos um dia da semana!") 
+	    List<DiasSemana> diasSemana,
 	    @NotNull StatusTurma statusTurma,
 	    @NotNull Long idCurso,
 	    @NotNull Long idDisciplina,

@@ -25,11 +25,9 @@ public class Matricula {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idMatricula; 
-	@Column( nullable = false) 
+	@Column
 	private Double mediaFinal;
-	@Column( nullable = false) 
-	private Double frequencia;
-	@Column( nullable = false)
+	@Column
 	@Enumerated(EnumType.STRING)
 	private StatusMatricula statusMatricula;
 	@ManyToOne
@@ -38,7 +36,7 @@ public class Matricula {
 	private Aluno aluno;
 	@ManyToOne
 	@JsonIgnore
-	@JoinColumn(name = "id_turma")
+	@JoinColumn(name = "id_turma", nullable = false)
 	private Turma turma;
 
 	@OneToMany(mappedBy="matricula")
@@ -53,7 +51,6 @@ public class Matricula {
 		
 		this.idMatricula = idMatricula;
 		this.mediaFinal = mediaFinal;
-		this.frequencia = frequencia;
 		this.statusMatricula = statusMatricula;
 		this.aluno = aluno;
 		this.turma = turma;
@@ -68,14 +65,7 @@ public class Matricula {
 		this.mediaFinal = mediaFinal;
 	}
 
-	public Double getFrequencia() {
-		return frequencia;
-	}
-
-	public void setFrequencia(Double frequencia) {
-		this.frequencia = frequencia;
-	}
-
+	
 	public StatusMatricula getStatusMatricula() {
 		return statusMatricula;
 	}

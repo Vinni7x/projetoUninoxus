@@ -23,7 +23,7 @@ public class DisciplinaService {
 		}
 			
 		public DisciplinaResponseDTO adicionar (CriarDisciplinaDTO dto) {  
-			  boolean disciplinaJaExiste = disciplinaRepository.existsByNomeCursoIgnoreCase(dto.nomeDisciplina());
+			  boolean disciplinaJaExiste = disciplinaRepository.existsByNomeDisciplinaIgnoreCase(dto.nomeDisciplina());
 			   if (disciplinaJaExiste) {
 				    throw new IllegalArgumentException("Essa Disciplina já existe!"); 
 				}  

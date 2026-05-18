@@ -7,22 +7,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssp.uninoxus.dto.CriarDisciplinaDTO;
-import com.ssp.uninoxus.dto.DisciplinaResponseDTO;
-import com.ssp.uninoxus.service.DisciplinaService;
+import com.ssp.uninoxus.dto.CriarProfessorDTO;
+import com.ssp.uninoxus.dto.ProfessorResponseDTO;
+import com.ssp.uninoxus.service.ProfessorService;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping (value = "/disciplina")
-public class DisciplnaController {
-
+@RequestMapping("/professores")
+public class ProfessorController {
+	
 	@Autowired
-	private DisciplinaService disciplinaService;
+	private ProfessorService professorService;
 	
 	@PostMapping 
-    public ResponseEntity<DisciplinaResponseDTO> insert (@RequestBody @Valid CriarDisciplinaDTO dto){ 
+    public ResponseEntity<ProfessorResponseDTO> insert (@RequestBody @Valid CriarProfessorDTO dto){ 
 		
-		 return ResponseEntity.status(201).body(disciplinaService.adicionar(dto)); }  
+		 return ResponseEntity.status(201).body(professorService.adicionar(dto)); } 
 }
-  

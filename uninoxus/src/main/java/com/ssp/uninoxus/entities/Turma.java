@@ -32,7 +32,8 @@ public class Turma {
 	private Long idTurma;
 	@Column( nullable = false) 
     private String semestre;
-	@Column( nullable = false) 
+	@Column( nullable = false)
+	@Enumerated(EnumType.STRING)
     private Turno turno;
 	@Column( nullable = false) 
     private LocalTime horarioInicio; 
@@ -43,6 +44,7 @@ public class Turma {
 	@Column( nullable = false) 
     private Integer vagas;
 	@Column( nullable = false) 
+	@Enumerated(EnumType.STRING)
     private List <DiasSemana> diasSemana = new ArrayList<>();
     @Column( nullable = false) 
 	@Enumerated(EnumType.STRING)

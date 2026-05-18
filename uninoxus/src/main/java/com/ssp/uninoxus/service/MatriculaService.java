@@ -1,12 +1,9 @@
 package com.ssp.uninoxus.service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.ssp.uninoxus.dto.CriarMatriculaDTO;
 import com.ssp.uninoxus.dto.MatriculaResponseDTO;
 import com.ssp.uninoxus.entities.Aluno;
@@ -27,13 +24,13 @@ public class MatriculaService {
 	@Autowired 
 	private MatriculaRepository matriculaRepository;
 	@Autowired 
+	
 	private TurmaRepository turmaRepository;
 	@Autowired 
 	private AlunoRepository alunoRepository;
 	@Autowired 
 	private NotaRepository notaRepository;
-	@Autowired 
-	private TurmaService turmaService;
+	
 	  
 	public MatriculaResponseDTO adicionar (CriarMatriculaDTO dto) {
 		 Turma turma = turmaRepository.findById(dto.idTurma())
@@ -68,12 +65,14 @@ public class MatriculaService {
 	        matriculaRepository.save(matricula);
 	        
 	        if (matriculasAtivas + 1 == turma.getVagas()) {
-	            turmaService.fecharTurma(dto.idTurma()); 
+	        	 
+	        	turma.setStatusTurma(StatusTurma.FECHADA);
+	  	        turmaRepository.save(turma); 
 	        }
 
-	        return toDTO(matricula);
+	        return toDTO(matricula); 
 	    }
-	 
+	
 	
 	
 	public void cancelar(Long idMatricula) {
@@ -91,18 +90,7 @@ public class MatriculaService {
 	    matricula.setStatusMatricula(StatusMatricula.CANCELADA);
 	    matriculaRepository.save(matricula);
 	} 
-	
-	
-	
-	 public List<MatriculaResponseDTO> todasMatriculas(Long matriculaAluno) {
-    	 List<Matricula> matriculas = matriculaRepository.findAllByAluno_MatriculaAluno(matriculaAluno);
-    	     
-    	    List<MatriculaResponseDTO> lista = new ArrayList<>(); 
-     	    for (Matricula m : matriculas) {
-    	        lista.add(toDTO(m));  
-    	    } 
-    	    return lista; 
-    	}   
+	  
 	 
 	 Double getNotaNullable(Long idMatricula, TipoAvaliacao tipoAvaliacao) {
 		    Optional<Nota> nota = notaRepository
@@ -156,15 +144,70 @@ public class MatriculaService {
 		    return true;
 		}
 	 
+	 public void consolidarMatricula(Long idMatricula) {
+		    Matricula matricula = matriculaRepository.findById(idMatricula)
+		        .orElseThrow(() -> new IllegalArgumentException("Matrícula não encontrada!"));
+
+		    if (matricula.getTurma().getStatusTurma() != StatusTurma.CONSOLIDADA) {
+		        throw new IllegalArgumentException("Turma ainda não foi consolidada!");
+		    }
+
+		    Double p1 = getNotaNullable(idMatricula, TipoAvaliacao.AV1);
+		    Double p2 = getNotaNullable(idMatricula, TipoAvaliacao.AV2);
+		    Double p3 = getNotaNullable(idMatricula, TipoAvaliacao.AV3);
+
+		    double media = (p1 + p2 + p3) / 3;
+
+		    if (media >= 7) {
+		        matricula.setMediaFinal(media);
+		        matricula.setStatusMatricula(StatusMatricula.APROVADO);
+		        matriculaRepository.save(matricula);
+		        return;
+		    }
+
+		    Double reposicao = getNotaNullable(idMatricula, TipoAvaliacao.REPOSICAO);
+		    double menorNota = Math.min(p1, Math.min(p2, p3));
+
+		    if (reposicao != null && reposicao > menorNota) {
+		        if (p1 <= p2 && p1 <= p3) {
+		            media = (reposicao + p2 + p3) / 3;
+		        } else if (p2 <= p1 && p2 <= p3) {
+		            media = (p1 + reposicao + p3) / 3;
+		        } else {
+		            media = (p1 + p2 + reposicao) / 3;
+		        }
+		    }
+
+		    if (media >= 7) {
+		        matricula.setMediaFinal(media);
+		        matricula.setStatusMatricula(StatusMatricula.APROVADO);
+		        matriculaRepository.save(matricula);
+		        return;
+		    }
+
+		    Double notaFinal = getNotaNullable(idMatricula, TipoAvaliacao.FINAL);
+		    double mediaComFinal = (media + notaFinal) / 2;
+
+		    if (mediaComFinal >= 6) {
+		        matricula.setMediaFinal(mediaComFinal);
+		        matricula.setStatusMatricula(StatusMatricula.APROVADO);
+		    } else {
+		        matricula.setMediaFinal(mediaComFinal);
+		        matricula.setStatusMatricula(StatusMatricula.REPROVADO);
+		    }
+
+		    matriculaRepository.save(matricula);
+		}
+	 
 	
 	 private MatriculaResponseDTO toDTO(Matricula matricula) {
 	        return new MatriculaResponseDTO(
 	            matricula.getIdMatricula(),
 	            matricula.getMediaFinal(),
-	            matricula.getFrequencia(),
 	            matricula.getStatusMatricula() 
 	          
 	        );
 	    }
 
 } 
+ 

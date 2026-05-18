@@ -10,7 +10,6 @@ import com.ssp.uninoxus.enums.Turno;
 
 
 public record TurmaResponseDTO(
-		Long idTurma,
 		String semestre,
 		Turno turno,  
 	    LocalTime horarioInicio,
@@ -24,3 +23,4 @@ public record TurmaResponseDTO(
 	    Long MatriculaProfessor) {
 
 }
+

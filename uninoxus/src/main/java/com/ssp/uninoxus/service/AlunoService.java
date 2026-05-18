@@ -7,11 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.ssp.uninoxus.dto.AlunoResponseDTO;
 import com.ssp.uninoxus.dto.CriarAlunoDTO;
-import com.ssp.uninoxus.dto.CriarProfessorDTO;
-import com.ssp.uninoxus.dto.ProfessorResponseDTO;
 import com.ssp.uninoxus.entities.Aluno;
 import com.ssp.uninoxus.entities.Curso;
-import com.ssp.uninoxus.entities.Professor;
 import com.ssp.uninoxus.repositories.AlunoRepository;
 import com.ssp.uninoxus.repositories.CursoRepository;
 

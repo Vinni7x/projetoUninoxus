@@ -1,7 +1,7 @@
 package com.ssp.uninoxus.service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 import com.ssp.uninoxus.dto.AvaliacaoResponseDTO;
 import com.ssp.uninoxus.dto.CriarAvaliacaoDTO;
 import com.ssp.uninoxus.entities.Avaliacao;
+import com.ssp.uninoxus.entities.Matricula;
 import com.ssp.uninoxus.entities.Turma;
 import com.ssp.uninoxus.repositories.AvaliacaoRepository;
 import com.ssp.uninoxus.repositories.MatriculaRepository;
-import com.ssp.uninoxus.repositories.NotaRepository;
 import com.ssp.uninoxus.repositories.TurmaRepository;
 
 @Service
@@ -21,8 +21,6 @@ public class AvaliacaoService {
     @Autowired
     private AvaliacaoRepository avaliacaoRepository;
 
-    @Autowired
-    private NotaRepository notaRepository;
 
     @Autowired
     private TurmaRepository turmaRepository;
@@ -70,14 +68,23 @@ public class AvaliacaoService {
         return toDTO(avaliacao);
     }
 
-    public List<AvaliacaoResponseDTO> todasAvaliacoesDaTurma(Long idTurma) {
-        turmaRepository.findById(idTurma)
-            .orElseThrow(() -> new IllegalArgumentException("Turma não encontrada!"));
+    public List<AvaliacaoResponseDTO> avaliacoesDoAluno(Long idMatricula) {
+        Matricula matricula = matriculaRepository.findById(idMatricula)
+            .orElseThrow(() -> new IllegalArgumentException("Matrícula não encontrada!"));
 
-        return avaliacaoRepository.findAllByTurma_IdTurma(idTurma)
-            .stream()
-            .map(this::toDTO)
-            .collect(Collectors.toList());
+        List<Avaliacao> avaliacoes = avaliacaoRepository
+            .findAllByTurma_IdTurma(matricula.getTurma().getIdTurma());
+
+        List<AvaliacaoResponseDTO> lista = new ArrayList<>();
+        for (Avaliacao a : avaliacoes) {
+            lista.add(new AvaliacaoResponseDTO(
+                a.getDescricaoAvaliacao(),
+                a.getData(),
+                a.getTipoAvaliacao(),
+                a.getTurma().getDisciplina().getNomeDisciplina()
+            )); 
+        }
+        return lista;
     }
 
 

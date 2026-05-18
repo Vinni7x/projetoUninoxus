@@ -10,8 +10,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssp.uninoxus.dto.AlunoResponseDTO;
+import com.ssp.uninoxus.dto.CriarAlunoDTO;
 import com.ssp.uninoxus.entities.Aluno;
 import com.ssp.uninoxus.service.AlunoService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/alunos")
@@ -26,13 +30,8 @@ public class AlunoController {
 		List<Aluno> lista = alunoService.findAll(); 
 		return ResponseEntity.ok(lista);}
 
-	/*@PostMapping 
-    public ResponseEntity<Aluno> insert (@RequestBody Aluno aluno){ 
+	@PostMapping 
+    public ResponseEntity<AlunoResponseDTO> insert (@RequestBody @Valid CriarAlunoDTO dto){ 
 		
-		 aluno = alunoService.adiconar(aluno);  
-		 return ResponseEntity.status(201).body(aluno); } */
-	
-	
-	
-
-}
+		return ResponseEntity.status(201).body(alunoService.adicionar(dto)); }
+} 

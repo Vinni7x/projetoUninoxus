@@ -26,7 +26,7 @@ public class AvaliacaoController {
 	@Autowired 
 	private AvaliacaoService avaliacaoService;
 	
-/*	@GetMapping("/{idMatricula}")
+/*Mapping("/{idMatricula}")
 	public  ResponseEntity<List<AvaliacaoResponseDTO>> todasProvas(@PathVariable Long idMatricula){
 		List<AvaliacaoResponseDTO> lista = avaliacaoService.todasProvas(idMatricula);
 		return ResponseEntity.status(200).body(lista);  

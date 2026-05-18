@@ -1,17 +1,24 @@
 package com.ssp.uninoxus.service;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.ssp.uninoxus.dto.CriarTurmaDTO;
+import com.ssp.uninoxus.dto.TurmaMatriculadoDTO;
 import com.ssp.uninoxus.dto.TurmaResponseDTO;
 import com.ssp.uninoxus.entities.Curso;
 import com.ssp.uninoxus.entities.Disciplina;
 import com.ssp.uninoxus.entities.Matricula;
 import com.ssp.uninoxus.entities.Professor;
 import com.ssp.uninoxus.entities.Turma;
+import com.ssp.uninoxus.enums.DiasSemana;
 import com.ssp.uninoxus.enums.StatusMatricula;
 import com.ssp.uninoxus.enums.StatusTurma;
 import com.ssp.uninoxus.repositories.CursoRepository;
 import com.ssp.uninoxus.repositories.DisciplinaRepository;
+import com.ssp.uninoxus.repositories.MatriculaRepository;
 import com.ssp.uninoxus.repositories.ProfessorRepository;
 import com.ssp.uninoxus.repositories.TurmaRepository;
 
@@ -22,6 +29,8 @@ public class TurmaService {
     private TurmaRepository turmaRepository;
     @Autowired
     private MatriculaService matriculaService;
+    @Autowired
+    private MatriculaRepository matriculaRepository;
     @Autowired
     private CursoRepository cursoRepository;
     @Autowired
@@ -79,7 +88,7 @@ public class TurmaService {
         turmaRepository.save(turma);
         return toDTO(turma);
     }
-
+ 
     public void consolidar(Long idTurma) {
         Turma turma = turmaRepository.findById(idTurma)
             .orElseThrow(() -> new IllegalArgumentException("Turma não encontrada!"));
@@ -97,20 +106,13 @@ public class TurmaService {
                     );
                 }
             }
-        }
+        } 
 
         turma.setStatusTurma(StatusTurma.CONSOLIDADA);
         turmaRepository.save(turma);
     }
     
-    
-    public void fecharTurma(Long idTurma) {
-        Turma turma = turmaRepository.findById(idTurma)
-            .orElseThrow(() -> new IllegalArgumentException("Turma não encontrada!"));
-
-        turma.setStatusTurma(StatusTurma.FECHADA);
-        turmaRepository.save(turma);  
-    }
+   
     
 
     public void deletar(Long idTurma) {
@@ -120,10 +122,32 @@ public class TurmaService {
             throw new IllegalArgumentException("Turma não encontrada, impossível apagar!");
         }
     }
+    
+    public List<TurmaMatriculadoDTO> turmasMatriculado(Long idMatriculaAluno) {
+        List<Matricula> matriculas = matriculaRepository
+            .findAllByAluno_MatriculaAlunoAndStatusMatricula(idMatriculaAluno, StatusMatricula.MATRICULADO);
 
+        List<TurmaMatriculadoDTO> lista = new ArrayList<>();
+        
+        for (Matricula m : matriculas) {
+        	Turma turma = m.getTurma(); 
+         if (turma.getStatusTurma() != StatusTurma.CONSOLIDADA) {
+           
+            lista.add(new TurmaMatriculadoDTO(
+                turma.getTurno(),
+                turma.getHorarioInicio(),
+                turma.getHorarioFinal(),
+                turma.getLocal(),
+                turma.getDiasSemana().toArray(new DiasSemana[0]),
+                turma.getStatusTurma()
+            ));}
+        }
+        return lista;
+    }
+    
     private TurmaResponseDTO toDTO(Turma turma) {
         return new TurmaResponseDTO(
-            turma.getIdTurma(),
+         
             turma.getSemestre(),
             turma.getTurno(),
             turma.getHorarioInicio(),
