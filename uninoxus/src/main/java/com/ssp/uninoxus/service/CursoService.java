@@ -49,7 +49,17 @@ public class CursoService {
 	        cursoRepository.save(cursoExistente); 
 	        return toDTO(cursoExistente);	  
 	 }
+	 
+	 
+	    public void deletar(Long idCurso) {
+	        if (!cursoRepository.existsById(idCurso)) {
+	            throw new IllegalArgumentException("Curso não encontrada, impossível apagar!"); 
+	        }
+	        cursoRepository.deleteById(idCurso); 
+	    }
 	
+	    
+	    
 	 private CursoResponseDTO toDTO(Curso curso) {
 	        return new CursoResponseDTO(
 	            curso.getIdCurso(),

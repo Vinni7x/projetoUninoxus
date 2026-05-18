@@ -23,7 +23,7 @@ public class Nota {
 	@JoinColumn(name = "id_avaliacao")
 	private Avaliacao avaliacao;
 	
-	
+	 
 	public Nota(Long idNota, Double nota, Matricula matricula, Avaliacao avaliacao) {
 		
 		this.idNota = idNota;

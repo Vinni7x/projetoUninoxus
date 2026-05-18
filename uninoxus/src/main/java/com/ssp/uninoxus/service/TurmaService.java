@@ -1,7 +1,6 @@
 package com.ssp.uninoxus.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.ssp.uninoxus.dto.CriarTurmaDTO;
 import com.ssp.uninoxus.dto.TurmaResponseDTO;
 import com.ssp.uninoxus.entities.Curso;
@@ -103,6 +102,16 @@ public class TurmaService {
         turma.setStatusTurma(StatusTurma.CONSOLIDADA);
         turmaRepository.save(turma);
     }
+    
+    
+    public void fecharTurma(Long idTurma) {
+        Turma turma = turmaRepository.findById(idTurma)
+            .orElseThrow(() -> new IllegalArgumentException("Turma não encontrada!"));
+
+        turma.setStatusTurma(StatusTurma.FECHADA);
+        turmaRepository.save(turma);  
+    }
+    
 
     public void deletar(Long idTurma) {
         if (idTurma != null && turmaRepository.existsById(idTurma)) {

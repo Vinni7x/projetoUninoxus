@@ -32,6 +32,8 @@ public class MatriculaService {
 	private AlunoRepository alunoRepository;
 	@Autowired 
 	private NotaRepository notaRepository;
+	@Autowired 
+	private TurmaService turmaService;
 	  
 	public MatriculaResponseDTO adicionar (CriarMatriculaDTO dto) {
 		 Turma turma = turmaRepository.findById(dto.idTurma())
@@ -44,13 +46,13 @@ public class MatriculaService {
 	        }
 		  long matriculasAtivas = 0;
 		  for (Matricula m : turma.getMatriculas()) {
-		      if (m.getStatusMatricula() == StatusMatricula.MATRICULADO) {
+		      if (m.getStatusMatricula() == StatusMatricula.MATRICULADO) { 
 		          matriculasAtivas++;
 		      }
 		  }
 		  
-		  if (matriculasAtivas >= turma.getVagas()) {
-	            throw new IllegalArgumentException("Turma sem vagas disponíveis!");
+		  if (matriculasAtivas == turma.getVagas()) {
+	            throw new IllegalArgumentException("Turma sem vagas disponíveis!"); 
 	        }
 		  
 		  if (matriculaRepository.existsByAluno_MatriculaAlunoAndTurma_IdTurma(aluno.getMatriculaAluno(), turma.getIdTurma())) {
@@ -62,12 +64,16 @@ public class MatriculaService {
 	        matricula.setAluno(aluno);
 	        matricula.setTurma(turma);
 	        matricula.setStatusMatricula(StatusMatricula.MATRICULADO);
-	        matricula.setMediaFinal(0.0);
-	        matricula.setFrequencia(0.0);
  
 	        matriculaRepository.save(matricula);
-	        return toDTO(matricula);	 
-	}
+	        
+	        if (matriculasAtivas + 1 == turma.getVagas()) {
+	            turmaService.fecharTurma(dto.idTurma()); 
+	        }
+
+	        return toDTO(matricula);
+	    }
+	 
 	
 	
 	public void cancelar(Long idMatricula) {
@@ -111,7 +117,7 @@ public class MatriculaService {
 	
 	 public boolean validarAvaliacoesNotasParaConsolidacao(Long idMatricula) {
 		    Double p1 = getNotaNullable(idMatricula, TipoAvaliacao.AV1); 
-		    Double p2 = getNotaNullable(idMatricula, TipoAvaliacao.AV2);
+		    Double p2 = getNotaNullable(idMatricula, TipoAvaliacao.AV2); 
 		    Double p3 = getNotaNullable(idMatricula, TipoAvaliacao.AV3);    
 
 		    if (p1 == null || p2 == null || p3 == null) {
@@ -123,7 +129,7 @@ public class MatriculaService {
 		    if (media < 7) {
 		        Double reposicao = getNotaNullable(idMatricula, TipoAvaliacao.REPOSICAO);
 
-		        if (reposicao == null) { 
+		        if (reposicao == null) {  
 		            return false;
 		        }
 
@@ -141,7 +147,7 @@ public class MatriculaService {
 		        if (media < 7) {
 		            Double notaFinal = getNotaNullable(idMatricula, TipoAvaliacao.FINAL);
 
-		            if (notaFinal == null) {
+		            if (notaFinal == null) { 
 		                return false;
 		            }
 		        }

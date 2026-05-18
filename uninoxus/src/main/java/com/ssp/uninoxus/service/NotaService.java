@@ -30,7 +30,7 @@ public class NotaService {
 	        Matricula matricula = matriculaRepository.findById(dto.idMatricula())
 	            .orElseThrow(() -> new IllegalArgumentException("Matrícula não encontrada!"));
 	        
-	        if (matricula.getTurma().getStatusTurma() != StatusTurma.ABERTA) { 
+	        if (matricula.getTurma().getStatusTurma() == StatusTurma.CONSOLIDADA) {  
 	            throw new IllegalArgumentException("Não é possível lançar nota em uma turma fechada ou consolidada!");
 	        } 
 	        

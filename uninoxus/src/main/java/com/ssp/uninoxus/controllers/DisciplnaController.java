@@ -7,8 +7,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssp.uninoxus.entities.Disciplina;
+import com.ssp.uninoxus.dto.CriarDisciplinaDTO;
+import com.ssp.uninoxus.dto.DisciplinaResponseDTO;
 import com.ssp.uninoxus.service.DisciplinaService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping (value = "/disciplina")
@@ -18,8 +21,8 @@ public class DisciplnaController {
 	private DisciplinaService disciplinaService;
 	
 	@PostMapping 
-    public ResponseEntity<Disciplina> insert (@RequestBody Disciplina disciplina){ 
+    public ResponseEntity<DisciplinaResponseDTO> insert (@RequestBody @Valid CriarDisciplinaDTO dto){ 
 		
-		disciplina = disciplinaService.adicionar(disciplina);  
-		 return ResponseEntity.status(201).body(disciplina); }
+		 return ResponseEntity.status(201).body(disciplinaService.adicionar(dto)); }  
 }
+ 
