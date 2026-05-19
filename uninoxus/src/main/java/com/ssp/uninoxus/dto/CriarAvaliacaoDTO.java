@@ -10,10 +10,14 @@ import jakarta.validation.constraints.NotNull;
 
 
 public record CriarAvaliacaoDTO(
-		@NotBlank String descricaoAvaliacao,
-	    @NotNull LocalDate data,
-	    @NotNull Long idTurma,
-	    @NotNull TipoAvaliacao tipoAvaliacao 
+		@NotBlank 
+		String descricaoAvaliacao,
+	    @NotNull 
+	    LocalDate data,
+	    @NotNull 
+	    Long idTurma,
+	    @NotNull  
+	    TipoAvaliacao tipoAvaliacao 
 		) 
 	
  {}

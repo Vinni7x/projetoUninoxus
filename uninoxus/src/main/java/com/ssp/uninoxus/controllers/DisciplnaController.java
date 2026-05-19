@@ -14,7 +14,7 @@ import com.ssp.uninoxus.service.DisciplinaService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping (value = "/disciplina")
+@RequestMapping (value = "/disciplinas")
 public class DisciplnaController {
 
 	@Autowired

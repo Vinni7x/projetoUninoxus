@@ -1,11 +1,8 @@
 package com.ssp.uninoxus.service;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.ssp.uninoxus.dto.AvaliacaoResponseDTO;
 import com.ssp.uninoxus.dto.CriarAvaliacaoDTO;
 import com.ssp.uninoxus.entities.Avaliacao;
@@ -64,7 +61,7 @@ public class AvaliacaoService {
         avaliacao.setData(dto.data());
         avaliacao.setTurma(turma);
 
-        avaliacaoRepository.save(avaliacao);
+        avaliacaoRepository.save(avaliacao); 
         return toDTO(avaliacao);
     }
 

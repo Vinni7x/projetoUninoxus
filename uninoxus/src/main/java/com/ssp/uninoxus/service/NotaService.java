@@ -53,8 +53,8 @@ public class NotaService {
 	        return new NotaResponseDTO(
 	            nota.getIdNota(),
 	            nota.getNota(),
-	            nota.getMatricula().getIdMatricula(),
-	            nota.getAvaliacao().getIdAvaliacao()
+	            nota.getMatricula().getAluno().getNomePessoa(),
+	            nota.getAvaliacao().getTurma().getDisciplina().getNomeDisciplina()
 	        );
 	    }
 	}

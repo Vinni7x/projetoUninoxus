@@ -34,4 +34,4 @@ public class AlunoController {
     public ResponseEntity<AlunoResponseDTO> insert (@RequestBody @Valid CriarAlunoDTO dto){ 
 		
 		return ResponseEntity.status(201).body(alunoService.adicionar(dto)); }
-} 
+}  

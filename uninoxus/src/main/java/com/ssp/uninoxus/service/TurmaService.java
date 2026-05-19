@@ -156,9 +156,9 @@ public class TurmaService {
             turma.getVagas(),
             turma.getDiasSemana(),
             turma.getStatusTurma(),
-            turma.getCurso().getIdCurso(),
-            turma.getDisciplina().getIdDisciplina(),
-            turma.getProfessor().getMatriculaProfessor()   
+            turma.getCurso().getNomeCurso(), 
+            turma.getDisciplina().getNomeDisciplina(),
+            turma.getProfessor().getNomePessoa()    
         );
     }
 }
