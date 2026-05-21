@@ -1,9 +1,12 @@
 package com.ssp.uninoxus.service;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ssp.uninoxus.dto.CriarMatriculaDTO;
 import com.ssp.uninoxus.dto.MatriculaResponseDTO;
+import com.ssp.uninoxus.dto.NotaAlunoDTO;
 import com.ssp.uninoxus.entities.Aluno;
 import com.ssp.uninoxus.entities.Matricula;
 import com.ssp.uninoxus.entities.Nota;
@@ -53,7 +56,7 @@ public class MatriculaService {
 		  if (matriculaRepository.existsByAluno_MatriculaAlunoAndTurma_IdTurma(aluno.getMatriculaAluno(), turma.getIdTurma())) {
 	            throw new IllegalArgumentException("Aluno já matriculado nessa turma!");
 	        }
-		  
+		   
 		  
 		   Matricula matricula = new Matricula();
 	        matricula.setAluno(aluno);
@@ -141,6 +144,40 @@ public class MatriculaService {
 		    
 		    return true;
 		}
+	 
+	 
+	 public List <NotaAlunoDTO> verNotasAluno (Long matriculaAluno) {
+		 
+		 Aluno aluno = alunoRepository.findById(matriculaAluno)
+			        .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado!"));
+		 
+		 List<StatusMatricula> statusAlvo = List.of(
+				    StatusMatricula.MATRICULADO, 
+				    StatusMatricula.APROVADO, 
+				    StatusMatricula.REPROVADO
+				);
+		 
+		List<Matricula> matriculas = matriculaRepository
+			        .findByAluno_MatriculaAlunoAndStatusMatriculaIn(matriculaAluno, statusAlvo);
+			    
+			    List<NotaAlunoDTO> lista = new ArrayList<>();
+ 
+			    for (Matricula m : matriculas) {  
+			        NotaAlunoDTO dto = new NotaAlunoDTO(
+			            m.getTurma().getDisciplina().getNomeDisciplina(),
+			            getNotaNullable(m.getIdMatricula(), TipoAvaliacao.AV1),
+			            getNotaNullable(m.getIdMatricula(), TipoAvaliacao.AV2),
+			            getNotaNullable(m.getIdMatricula(), TipoAvaliacao.AV3),
+			            getNotaNullable(m.getIdMatricula(), TipoAvaliacao.REPOSICAO),
+			            getNotaNullable(m.getIdMatricula(), TipoAvaliacao.FINAL),
+			            m.getStatusMatricula()
+			        );
+			        lista.add(dto);
+			    }
+
+			    return lista; 
+		 
+	 }
 	 
 	 public void consolidarMatricula(Long idMatricula) {
 		    Matricula matricula = matriculaRepository.findById(idMatricula)

@@ -1,12 +1,8 @@
 package com.ssp.uninoxus.dto;
-
 import java.time.LocalTime;
 import java.util.List;
-
 import com.ssp.uninoxus.enums.DiasSemana;
-import com.ssp.uninoxus.enums.StatusTurma;
 import com.ssp.uninoxus.enums.Turno;
-
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -21,7 +17,6 @@ public record CriarTurmaDTO(
 	    @Min(1) Integer vagas,
 	    @NotEmpty(message = "Selecione pelo menos um dia da semana!") 
 	    List<DiasSemana> diasSemana,
-	    @NotNull StatusTurma statusTurma,
 	    @NotNull Long idCurso,
 	    @NotNull Long idDisciplina,
 	    @NotNull Long matriculaProfessor) {

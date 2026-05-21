@@ -175,7 +175,7 @@ public class Turma {
 
 
 	public Long getIdTurma() {
-		return idTurma;
+		return idTurma; 
 	}
     
 	public Curso getCurso() {

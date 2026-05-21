@@ -1,8 +1,6 @@
 package com.ssp.uninoxus.service;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.ssp.uninoxus.dto.LancarNotaDTO;
 import com.ssp.uninoxus.dto.NotaResponseDTO;
 import com.ssp.uninoxus.entities.Avaliacao;
@@ -21,7 +19,8 @@ public class NotaService {
 	@Autowired
 	private AvaliacaoRepository avaliacaoRepository;
 	@Autowired
-	private MatriculaRepository matriculaRepository;  
+	private MatriculaRepository matriculaRepository; 
+	
 	
 	 public NotaResponseDTO lancarNota(LancarNotaDTO dto) {
 	        Avaliacao avaliacao = avaliacaoRepository.findById(dto.idAvaliacao())
@@ -47,14 +46,11 @@ public class NotaService {
 	        return toNotaDTO(nota);
 	    } 
 	 
-	 
-
 	  private NotaResponseDTO toNotaDTO(Nota nota) { 
 	        return new NotaResponseDTO(
-	            nota.getIdNota(),
 	            nota.getNota(),
 	            nota.getMatricula().getAluno().getNomePessoa(),
-	            nota.getAvaliacao().getTurma().getDisciplina().getNomeDisciplina()
+	            nota.getAvaliacao().getTurma().getDisciplina().getNomeDisciplina() 
 	        );
 	    }
 	}

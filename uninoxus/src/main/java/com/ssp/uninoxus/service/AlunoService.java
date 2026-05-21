@@ -70,12 +70,25 @@ public class AlunoService {
 	        return toDTO(alunoExistente);	 
 	 } 
 	 
+	 public AlunoResponseDTO buscarPorId(Long matriculaAluno) {
+		    if (matriculaAluno == null) {
+		        throw new IllegalArgumentException("A matrícula do aluno não pode ser nula!");
+		    } 
+		    
+		    Aluno aluno = alunoRepository.findById(matriculaAluno)
+		        .orElseThrow(() -> new IllegalArgumentException("Aluno com matrícula " + matriculaAluno + " não encontrado!"));
+		        
+		  
+		    return toDTO(aluno);    
+		}
+ 
 	 
 	 private AlunoResponseDTO toDTO(Aluno aluno) { 
 	        return new AlunoResponseDTO( 
+	        aluno.getMatriculaAluno(),
 	        aluno.getNomePessoa(),
 	        aluno.getRedimentoAcademico(),
-	        aluno.getCurso().getNomeCurso() 
+	        aluno.getCurso().getNomeCurso()  
 	        
 	        ); 
 	    }

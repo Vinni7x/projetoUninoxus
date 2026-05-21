@@ -2,6 +2,7 @@ package com.ssp.uninoxus.service;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.ssp.uninoxus.dto.CriarProfessorDTO;
 import com.ssp.uninoxus.dto.ProfessorResponseDTO;
 import com.ssp.uninoxus.entities.Curso;
@@ -70,12 +71,24 @@ public class ProfessorService {
 		   professorExistente.setCurso(curso);   
 			 
 	        professorRepository.save(professorExistente); 
-	        return toDTO(professorExistente);	
+	        return toDTO(professorExistente);	 
 	 } 
 	
+	 public ProfessorResponseDTO buscarPorId(Long matriculaProfessor) {
+		    if (matriculaProfessor == null) {
+		        throw new IllegalArgumentException("A matrícula do aluno não pode ser nula!");
+		    } 
+		    
+		    Professor professor = professorRepository.findById(matriculaProfessor)
+		        .orElseThrow(() -> new IllegalArgumentException("Aluno com matrícula " + matriculaProfessor + " não encontrado!"));
+		        
+		  
+		    return toDTO(professor);    
+		}
 	 
 	 private ProfessorResponseDTO toDTO(Professor professor) { 
 	        return new ProfessorResponseDTO(
+	        professor.getMatriculaProfessor(),
 	        professor.getNomePessoa(),  
 	        professor.getCurso().getNomeCurso()
 	        ); 

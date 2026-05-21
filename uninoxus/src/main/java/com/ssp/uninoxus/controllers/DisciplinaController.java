@@ -15,7 +15,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping (value = "/disciplinas")
-public class DisciplnaController {
+public class DisciplinaController {
 
 	@Autowired
 	private DisciplinaService disciplinaService;

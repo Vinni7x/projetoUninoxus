@@ -7,21 +7,14 @@ import com.ssp.uninoxus.enums.DiasSemana;
 import com.ssp.uninoxus.enums.StatusTurma;
 import com.ssp.uninoxus.enums.Turno;
 
-
-
-public record TurmaResponseDTO(
+public record TurmaMinistradaDTO(
 		Long idTurma,
-		String semestre,
-		Turno turno,  
+	    String nomeDisciplina,
+	    Turno turno,
 	    LocalTime horarioInicio,
 	    LocalTime horarioFinal,
 	    String local,
-	    Integer vagas,
 	    List<DiasSemana> diasSemana,
-	    StatusTurma statusTurma,
-	    String nomeCurso,
-	    String nomeDisicplina,
-	    String nomeProfessor) {
+	    StatusTurma statusTurma) {
 
 }
-

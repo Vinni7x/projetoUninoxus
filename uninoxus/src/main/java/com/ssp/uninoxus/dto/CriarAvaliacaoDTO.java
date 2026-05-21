@@ -16,9 +16,9 @@ public record CriarAvaliacaoDTO(
 	    LocalDate data,
 	    @NotNull 
 	    Long idTurma,
-	    @NotNull  
+	    @NotNull 
 	    TipoAvaliacao tipoAvaliacao 
 		) 
-	
+	 
  {}
 

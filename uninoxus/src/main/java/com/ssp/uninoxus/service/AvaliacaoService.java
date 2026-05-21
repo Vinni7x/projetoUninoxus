@@ -1,8 +1,12 @@
 package com.ssp.uninoxus.service;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import com.ssp.uninoxus.dto.AvaliacaoResponseDTO;
 import com.ssp.uninoxus.dto.CriarAvaliacaoDTO;
 import com.ssp.uninoxus.entities.Avaliacao;
@@ -65,12 +69,8 @@ public class AvaliacaoService {
         return toDTO(avaliacao);
     }
 
-    public List<AvaliacaoResponseDTO> avaliacoesDoAluno(Long idMatricula) {
-        Matricula matricula = matriculaRepository.findById(idMatricula)
-            .orElseThrow(() -> new IllegalArgumentException("Matrícula não encontrada!"));
-
-        List<Avaliacao> avaliacoes = avaliacaoRepository
-            .findAllByTurma_IdTurma(matricula.getTurma().getIdTurma());
+    public List<AvaliacaoResponseDTO> avaliacoesDoAluno(Long matriculaAluno) {
+        List<Avaliacao> avaliacoes = avaliacaoRepository.findByTurma_Matriculas_Aluno_MatriculaAluno(matriculaAluno);
 
         List<AvaliacaoResponseDTO> lista = new ArrayList<>();
         for (Avaliacao a : avaliacoes) {
@@ -81,9 +81,26 @@ public class AvaliacaoService {
                 a.getTurma().getDisciplina().getNomeDisciplina()
             )); 
         }
+        
         return lista;
     }
+    
+    
+    public List<AvaliacaoResponseDTO> avaliacoesDoProfessor(Long matriculaProfessor) {
+        List<Avaliacao> avaliacoes = avaliacaoRepository.findByTurma_Professor_MatriculaProfessor(matriculaProfessor);
 
+        List<AvaliacaoResponseDTO> lista = new ArrayList<>();
+        for (Avaliacao a : avaliacoes) {
+            lista.add(new AvaliacaoResponseDTO(
+                a.getDescricaoAvaliacao(),
+                a.getData(),
+                a.getTipoAvaliacao(),
+                a.getTurma().getDisciplina().getNomeDisciplina() 
+            )); 
+        }
+         
+        return lista;
+    }
 
     public void deletar(Long idAvaliacao) {
         if (!avaliacaoRepository.existsById(idAvaliacao)) {

@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service;
 
 import com.ssp.uninoxus.dto.CriarTurmaDTO;
 import com.ssp.uninoxus.dto.TurmaMatriculadoDTO;
+import com.ssp.uninoxus.dto.TurmaMinistradaDTO;
 import com.ssp.uninoxus.dto.TurmaResponseDTO;
 import com.ssp.uninoxus.entities.Curso;
 import com.ssp.uninoxus.entities.Disciplina;
 import com.ssp.uninoxus.entities.Matricula;
 import com.ssp.uninoxus.entities.Professor;
 import com.ssp.uninoxus.entities.Turma;
-import com.ssp.uninoxus.enums.DiasSemana;
 import com.ssp.uninoxus.enums.StatusMatricula;
 import com.ssp.uninoxus.enums.StatusTurma;
 import com.ssp.uninoxus.repositories.CursoRepository;
@@ -54,7 +54,7 @@ public class TurmaService {
         turma.setLocal(dto.local());
         turma.setVagas(dto.vagas());
         turma.setDiasSemana(dto.diasSemana());
-        turma.setStatusTurma(dto.statusTurma());
+        turma.setStatusTurma(StatusTurma.ABERTA);
         turma.setCurso(curso);
         turma.setDisciplina(disciplina);
         turma.setProfessor(professor); 
@@ -80,8 +80,8 @@ public class TurmaService {
         turma.setLocal(dto.local());
         turma.setVagas(dto.vagas());
         turma.setDiasSemana(dto.diasSemana());
-        turma.setStatusTurma(dto.statusTurma());
-        turma.setCurso(curso);
+        turma.setStatusTurma(StatusTurma.ABERTA);
+        turma.setCurso(curso); 
         turma.setDisciplina(disciplina);
         turma.setProfessor(professor);
 
@@ -107,9 +107,15 @@ public class TurmaService {
                 }
             }
         } 
-
+        
         turma.setStatusTurma(StatusTurma.CONSOLIDADA);
         turmaRepository.save(turma);
+
+        for (Matricula matricula : turma.getMatriculas()) {
+            if (matricula.getStatusMatricula() == StatusMatricula.MATRICULADO) {
+                matriculaService.consolidarMatricula(matricula.getIdMatricula());
+            }
+        }
     }
     
    
@@ -123,31 +129,72 @@ public class TurmaService {
         }
     }
     
-    public List<TurmaMatriculadoDTO> turmasMatriculado(Long idMatriculaAluno) {
+    public List<TurmaMatriculadoDTO> turmasMatriculado(Long matriculaAluno) {
         List<Matricula> matriculas = matriculaRepository
-            .findAllByAluno_MatriculaAlunoAndStatusMatricula(idMatriculaAluno, StatusMatricula.MATRICULADO);
+            .findByAluno_MatriculaAlunoAndStatusMatricula(matriculaAluno, StatusMatricula.MATRICULADO);
 
         List<TurmaMatriculadoDTO> lista = new ArrayList<>();
-        
         for (Matricula m : matriculas) {
-        	Turma turma = m.getTurma(); 
-         if (turma.getStatusTurma() != StatusTurma.CONSOLIDADA) {
-           
-            lista.add(new TurmaMatriculadoDTO(
-                turma.getTurno(),
-                turma.getHorarioInicio(),
-                turma.getHorarioFinal(),
-                turma.getLocal(),
-                turma.getDiasSemana().toArray(new DiasSemana[0]),
-                turma.getStatusTurma()
-            ));}
+            Turma t = m.getTurma();
+            if (t.getStatusTurma() != StatusTurma.CONSOLIDADA) {
+                lista.add(new TurmaMatriculadoDTO(
+                    m.getIdMatricula(),
+                    t.getDisciplina().getNomeDisciplina(),
+                    t.getTurno(),
+                    t.getHorarioInicio(),
+                    t.getHorarioFinal(),
+                    t.getLocal(),
+                    t.getDiasSemana(), 
+                    t.getStatusTurma()
+                ));
+            }
         }
         return lista;
     }
+     
+
+    	
+    	
+    	public List<TurmaResponseDTO> verTurmaAbertas(Long idCurso) {
+    	    List<Turma> turmasAbertas = turmaRepository.findByCursoIdCursoAndStatusTurma(idCurso, StatusTurma.ABERTA);
+    	    List<TurmaResponseDTO> lista = new ArrayList<>();
+    	    
+    	    for (Turma turma : turmasAbertas) { 
+    	        TurmaResponseDTO turmas = toDTO(turma);
+    	        lista.add(turmas);
+    	    }
+    	    return lista;
+    	}  
+    	
+    public List<TurmaMinistradaDTO> turmasMinistradas(Long matriculaProfessor) {
+    	    List<Turma> turmas = turmaRepository.findByProfessorMatriculaProfessor(matriculaProfessor);
+
+    	    List<TurmaMinistradaDTO> lista = new ArrayList<>(); 
+    	    for (Turma t : turmas) {  
+    	        if (t.getStatusTurma() != StatusTurma.CONSOLIDADA) {
+    	           
+    	            lista.add(new TurmaMinistradaDTO (
+    	            	t.getIdTurma(),
+    	                t.getDisciplina().getNomeDisciplina(),   
+    	                t.getTurno(),
+    	                t.getHorarioInicio(),
+    	                t.getHorarioFinal(),
+    	                t.getLocal(),
+    	                t.getDiasSemana(),
+    	                t.getStatusTurma()
+    	            ));
+    	        }
+    	    } 
+    	    return lista;
+    	}
+    	    
+    	
+    
+
     
     private TurmaResponseDTO toDTO(Turma turma) {
         return new TurmaResponseDTO(
-         
+            turma.getIdTurma(),
             turma.getSemestre(),
             turma.getTurno(),
             turma.getHorarioInicio(),
@@ -161,4 +208,5 @@ public class TurmaService {
             turma.getProfessor().getNomePessoa()    
         );
     }
+
 }

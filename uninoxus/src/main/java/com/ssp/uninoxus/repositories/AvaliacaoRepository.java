@@ -20,11 +20,12 @@ public interface AvaliacaoRepository extends JpaRepository <Avaliacao, Long>{
 
 	Optional<Avaliacao> findByTurma_IdTurmaAndTipoAvaliacao(Long idTurma, TipoAvaliacao tipoAvaliacao);
 
-	boolean existsByTurma_IdTurmaAndTipoAvaliacao(@NotNull Long idTurma,
-			@NotNull TipoAvaliacao tipoAvaliacao);
+	boolean existsByTurma_IdTurmaAndTipoAvaliacao(Long idTurma, TipoAvaliacao tipoAvaliacao);
  
-	
+	List<Avaliacao> findByTurma_Matriculas_Aluno_MatriculaAluno(Long matriculaAluno);
 
-} 
- 
+	List<Avaliacao> findByTurma_Professor_MatriculaProfessor(Long matriculaProfessor);
+
+}   
+  
   

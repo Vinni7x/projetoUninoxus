@@ -27,5 +27,4 @@ public class NotaController {
 	    return ResponseEntity.ok(notaService.lancarNota(dto)); 
 	}
 	
-
 }
