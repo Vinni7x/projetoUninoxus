@@ -148,10 +148,7 @@ public class MatriculaService {
 	 
 	 public List <NotaAlunoDTO> verNotasAluno (Long matriculaAluno) {
 		 
-		 Aluno aluno = alunoRepository.findById(matriculaAluno)
-			        .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado!"));
-		 
-		 List<StatusMatricula> statusAlvo = List.of(
+		 List<StatusMatricula> statusAlvo = List.of( 
 				    StatusMatricula.MATRICULADO, 
 				    StatusMatricula.APROVADO, 
 				    StatusMatricula.REPROVADO
@@ -170,6 +167,7 @@ public class MatriculaService {
 			            getNotaNullable(m.getIdMatricula(), TipoAvaliacao.AV3),
 			            getNotaNullable(m.getIdMatricula(), TipoAvaliacao.REPOSICAO),
 			            getNotaNullable(m.getIdMatricula(), TipoAvaliacao.FINAL),
+			            m.getMediaFinal(),
 			            m.getStatusMatricula()
 			        );
 			        lista.add(dto);

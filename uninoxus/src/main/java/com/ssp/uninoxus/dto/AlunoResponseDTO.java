@@ -4,7 +4,7 @@ public record AlunoResponseDTO(
 		   Long matriculaAluno,
 	       String nomePessoa,
 	       Double rendimentoAcademico,
-	       String nomeCruso 
+	       String nomeCurso 
 		
 		){
 

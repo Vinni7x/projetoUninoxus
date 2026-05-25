@@ -63,5 +63,12 @@ public class AvaliacaoController {
 			return ResponseEntity.status(200).body(lista);  
 			 
 		} 
+	  
+	  @GetMapping("/{idTurma}/provasTurma")
+		public  ResponseEntity<List<AvaliacaoResponseDTO>>avaliacoesDaTurma (@PathVariable Long idTurma){
+			List<AvaliacaoResponseDTO> lista = avaliacaoService.avaliacoesDaTurma(idTurma); 
+			return ResponseEntity.status(200).body(lista);  
+			    
+		} 
 } 
   

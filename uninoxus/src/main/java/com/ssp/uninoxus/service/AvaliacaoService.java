@@ -1,19 +1,13 @@
 package com.ssp.uninoxus.service;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
 import com.ssp.uninoxus.dto.AvaliacaoResponseDTO;
 import com.ssp.uninoxus.dto.CriarAvaliacaoDTO;
 import com.ssp.uninoxus.entities.Avaliacao;
-import com.ssp.uninoxus.entities.Matricula;
 import com.ssp.uninoxus.entities.Turma;
 import com.ssp.uninoxus.repositories.AvaliacaoRepository;
-import com.ssp.uninoxus.repositories.MatriculaRepository;
 import com.ssp.uninoxus.repositories.TurmaRepository;
 
 @Service
@@ -26,8 +20,6 @@ public class AvaliacaoService {
     @Autowired
     private TurmaRepository turmaRepository;
 
-    @Autowired
-    private MatriculaRepository matriculaRepository;
 
   
     public AvaliacaoResponseDTO adicionar(CriarAvaliacaoDTO dto) {
@@ -107,6 +99,22 @@ public class AvaliacaoService {
             throw new IllegalArgumentException("Avaliação não encontrada, impossível apagar!");
         }
         avaliacaoRepository.deleteById(idAvaliacao);
+    }
+    
+    public List<AvaliacaoResponseDTO> avaliacoesDaTurma(Long idTurma) {
+        List<Avaliacao> avaliacoes = avaliacaoRepository.findByTurma_IdTurma(idTurma);
+ 
+        List<AvaliacaoResponseDTO> lista = new ArrayList<>();
+        for (Avaliacao a : avaliacoes) {
+            lista.add(new AvaliacaoResponseDTO(
+                a.getDescricaoAvaliacao(),
+                a.getData(),
+                a.getTipoAvaliacao(),
+                a.getTurma().getDisciplina().getNomeDisciplina()
+            )); 
+        }
+         
+        return lista; 
     }
 
     private AvaliacaoResponseDTO toDTO(Avaliacao avaliacao) {

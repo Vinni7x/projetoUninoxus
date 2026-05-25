@@ -9,6 +9,7 @@ public record NotaAlunoDTO(
 		    Double av3,
 		    Double reposicao,
 		    Double finalNota,
+		    Double mediaFinal,
 		    StatusMatricula situacao 
 		) {
 

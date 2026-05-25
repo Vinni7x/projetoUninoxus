@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import com.ssp.uninoxus.entities.Avaliacao;
 import com.ssp.uninoxus.enums.TipoAvaliacao;
 
-import jakarta.validation.constraints.NotNull;
 
 
 @Repository
@@ -26,6 +25,8 @@ public interface AvaliacaoRepository extends JpaRepository <Avaliacao, Long>{
 
 	List<Avaliacao> findByTurma_Professor_MatriculaProfessor(Long matriculaProfessor);
 
-}   
+	List<Avaliacao> findByTurma_IdTurma(Long idTurma);
+
+}    
   
   

@@ -1,5 +1,5 @@
 package com.ssp.uninoxus.service;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +9,8 @@ import com.ssp.uninoxus.dto.AlunoResponseDTO;
 import com.ssp.uninoxus.dto.CriarAlunoDTO;
 import com.ssp.uninoxus.entities.Aluno;
 import com.ssp.uninoxus.entities.Curso;
+import com.ssp.uninoxus.entities.Matricula;
+import com.ssp.uninoxus.enums.StatusMatricula;
 import com.ssp.uninoxus.repositories.AlunoRepository;
 import com.ssp.uninoxus.repositories.CursoRepository;
 
@@ -20,8 +22,26 @@ public class AlunoService {
 	@Autowired
 	private CursoRepository cursoRepository;
 	
-	public List <Aluno> findAll(){
-		return alunoRepository.findAll(); 
+	public List<AlunoResponseDTO> findAllByTurma(Long idTurma) {
+	    List<Aluno> alunos = alunoRepository.findByMatricula_Turma_IdTurma(idTurma);
+	    List<AlunoResponseDTO> lista = new ArrayList<>();
+
+	    for (Aluno a : alunos) {
+	        for (Matricula m : a.getMatricula()) {
+	            if (m.getTurma().getIdTurma().equals(idTurma)
+	                    && m.getStatusMatricula() == StatusMatricula.MATRICULADO) {
+	                lista.add(new AlunoResponseDTO(
+	                    a.getMatriculaAluno(),
+	                    a.getNomePessoa(),
+	                    a.getRedimentoAcademico(),
+	                    a.getCurso().getNomeCurso()
+	                ));
+	                break; 
+	            }
+	        }
+	    }
+
+	    return lista;
 	}
 	
 	public AlunoResponseDTO adicionar (CriarAlunoDTO dto){
