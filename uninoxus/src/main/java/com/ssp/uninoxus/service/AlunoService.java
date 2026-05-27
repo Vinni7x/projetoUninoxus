@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssp.uninoxus.dto.AlunoResponseDTO;
+import com.ssp.uninoxus.dto.AlunoTurmaDTO;
 import com.ssp.uninoxus.dto.CriarAlunoDTO;
 import com.ssp.uninoxus.entities.Aluno;
 import com.ssp.uninoxus.entities.Curso;
@@ -22,20 +23,18 @@ public class AlunoService {
 	@Autowired
 	private CursoRepository cursoRepository;
 	
-	public List<AlunoResponseDTO> findAllByTurma(Long idTurma) {
-	    List<Aluno> alunos = alunoRepository.findByMatricula_Turma_IdTurma(idTurma);
-	    List<AlunoResponseDTO> lista = new ArrayList<>();
+	public List<AlunoTurmaDTO> findAllByTurma(Long idTurma) {
+	    List<Aluno> alunos = alunoRepository.findByMatriculas_Turma_IdTurma(idTurma);
+	    List<AlunoTurmaDTO> lista = new ArrayList<>();
 
 	    for (Aluno a : alunos) {
 	        for (Matricula m : a.getMatricula()) {
 	            if (m.getTurma().getIdTurma().equals(idTurma)
 	                    && m.getStatusMatricula() == StatusMatricula.MATRICULADO) {
-	                lista.add(new AlunoResponseDTO(
-	                    a.getMatriculaAluno(),
-	                    a.getNomePessoa(),
-	                    a.getRedimentoAcademico(),
-	                    a.getCurso().getNomeCurso()
-	                ));
+	                lista.add(new AlunoTurmaDTO(
+	                    m.getIdMatricula(),
+	                    m.getTurma().getIdTurma(),
+	                    a.getNomePessoa() ) );
 	                break; 
 	            }
 	        }

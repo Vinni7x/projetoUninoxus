@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import com.ssp.uninoxus.enums.TipoAvaliacao;
 
 public record AvaliacaoResponseDTO(
+		Long idAvaliacao,
+		Long idTurma,
 		String descricaoAvaliacao,
 		LocalDate data,
 		TipoAvaliacao tipoAvaliacao,

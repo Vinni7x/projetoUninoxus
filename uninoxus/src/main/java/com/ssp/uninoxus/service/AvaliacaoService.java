@@ -1,12 +1,15 @@
 package com.ssp.uninoxus.service;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.ssp.uninoxus.dto.AvaliacaoResponseDTO;
 import com.ssp.uninoxus.dto.CriarAvaliacaoDTO;
 import com.ssp.uninoxus.entities.Avaliacao;
 import com.ssp.uninoxus.entities.Turma;
+import com.ssp.uninoxus.enums.StatusProva;
 import com.ssp.uninoxus.repositories.AvaliacaoRepository;
 import com.ssp.uninoxus.repositories.TurmaRepository;
 
@@ -28,7 +31,8 @@ public class AvaliacaoService {
 
         boolean jaExiste = avaliacaoRepository.existsByTurma_IdTurmaAndTipoAvaliacao( 
             dto.idTurma(),
-            dto.tipoAvaliacao() 
+            dto.tipoAvaliacao()
+           
         );
         if (jaExiste) {
             throw new IllegalArgumentException(
@@ -40,6 +44,7 @@ public class AvaliacaoService {
         avaliacao.setDescricaoAvaliacao(dto.descricaoAvaliacao());
         avaliacao.setTipoAvaliacao(dto.tipoAvaliacao());
         avaliacao.setData(dto.data());
+        avaliacao.setStatusProva(StatusProva.ATIVA);
         avaliacao.setTurma(turma);
 
         avaliacaoRepository.save(avaliacao);
@@ -63,15 +68,17 @@ public class AvaliacaoService {
 
     public List<AvaliacaoResponseDTO> avaliacoesDoAluno(Long matriculaAluno) {
         List<Avaliacao> avaliacoes = avaliacaoRepository.findByTurma_Matriculas_Aluno_MatriculaAluno(matriculaAluno);
-
         List<AvaliacaoResponseDTO> lista = new ArrayList<>();
         for (Avaliacao a : avaliacoes) {
+        	if(a.getStatusProva() == StatusProva.ATIVA) { 
             lista.add(new AvaliacaoResponseDTO(
+                a.getIdAvaliacao(),	
+                a.getTurma().getIdTurma(),
                 a.getDescricaoAvaliacao(),
                 a.getData(),
                 a.getTipoAvaliacao(),
                 a.getTurma().getDisciplina().getNomeDisciplina()
-            )); 
+            )); }
         }
         
         return lista;
@@ -83,12 +90,15 @@ public class AvaliacaoService {
 
         List<AvaliacaoResponseDTO> lista = new ArrayList<>();
         for (Avaliacao a : avaliacoes) {
+        	if(a.getStatusProva() == StatusProva.ATIVA) {
             lista.add(new AvaliacaoResponseDTO(
+            	a.getIdAvaliacao(),
+            	a.getTurma().getIdTurma(),
                 a.getDescricaoAvaliacao(),
                 a.getData(),
                 a.getTipoAvaliacao(),
                 a.getTurma().getDisciplina().getNomeDisciplina() 
-            )); 
+            )); }
         }
          
         return lista;
@@ -103,10 +113,12 @@ public class AvaliacaoService {
     
     public List<AvaliacaoResponseDTO> avaliacoesDaTurma(Long idTurma) {
         List<Avaliacao> avaliacoes = avaliacaoRepository.findByTurma_IdTurma(idTurma);
- 
+        
         List<AvaliacaoResponseDTO> lista = new ArrayList<>();
         for (Avaliacao a : avaliacoes) {
             lista.add(new AvaliacaoResponseDTO(
+            	a.getIdAvaliacao(),
+            	a.getTurma().getIdTurma(),
                 a.getDescricaoAvaliacao(),
                 a.getData(),
                 a.getTipoAvaliacao(),
@@ -116,10 +128,20 @@ public class AvaliacaoService {
          
         return lista; 
     }
+    
+    public void finalizar (Long idAvaliacao) {
+    	 Avaliacao avaliacao = avaliacaoRepository.findById(idAvaliacao) 
+    	            .orElseThrow(() -> new IllegalArgumentException("Avaliação não encontrada!"));
+    	 
+           avaliacao.setStatusProva(StatusProva.FINALIZADA);
+           
+           avaliacaoRepository.save(avaliacao); 
+    }
 
     private AvaliacaoResponseDTO toDTO(Avaliacao avaliacao) {
         return new AvaliacaoResponseDTO(
-           
+        	avaliacao.getIdAvaliacao(),
+        	avaliacao.getTurma().getIdTurma(),
             avaliacao.getDescricaoAvaliacao(),
             avaliacao.getData(), 
             avaliacao.getTipoAvaliacao(),

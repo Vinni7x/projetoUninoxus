@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -69,6 +70,19 @@ public class AvaliacaoController {
 			List<AvaliacaoResponseDTO> lista = avaliacaoService.avaliacoesDaTurma(idTurma); 
 			return ResponseEntity.status(200).body(lista);  
 			    
-		} 
+		}
+	  
+	  @PatchMapping("/{idAvaliacao}/finalizar")
+	  public ResponseEntity <Void> finalizarProvas(Long idAvaliacao){
+			try {
+				avaliacaoService.finalizar(idAvaliacao);
+				return ResponseEntity.noContent().build(); }
+				catch (RuntimeException e) {
+					return ResponseEntity.notFound().build();
+				} 
+	  }
+	  
+	  
+	  
 } 
   

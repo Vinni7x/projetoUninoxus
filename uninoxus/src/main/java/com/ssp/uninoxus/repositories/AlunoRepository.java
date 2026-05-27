@@ -12,7 +12,7 @@ public interface AlunoRepository extends JpaRepository <Aluno, Long>{
 
 	boolean existsByCpf(String cpf);
 
-	List<Aluno> findByMatricula_Turma_IdTurma(Long idTurma);
+	List<Aluno> findByMatriculas_Turma_IdTurma(Long idTurma);
 
 	//Optional<Avaliacao> findByMatricula_IdMatriculaAndTipoAvaliacao(Long idMatricula, TipoAvaliacao tipo);
 	 

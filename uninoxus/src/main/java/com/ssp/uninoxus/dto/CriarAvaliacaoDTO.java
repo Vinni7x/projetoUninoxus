@@ -2,6 +2,7 @@ package com.ssp.uninoxus.dto;
 
 import java.time.LocalDate;
 
+import com.ssp.uninoxus.enums.StatusProva;
 import com.ssp.uninoxus.enums.TipoAvaliacao;
 
 import jakarta.validation.constraints.NotBlank;
@@ -17,8 +18,10 @@ public record CriarAvaliacaoDTO(
 	    @NotNull 
 	    Long idTurma,
 	    @NotNull 
-	    TipoAvaliacao tipoAvaliacao 
-		) 
+	    TipoAvaliacao tipoAvaliacao,
+	    @NotNull 
+	    StatusProva  statusProva 
+		)   
 	 
  {}
 

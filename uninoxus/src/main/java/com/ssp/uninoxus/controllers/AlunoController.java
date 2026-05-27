@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssp.uninoxus.dto.AlunoResponseDTO;
+import com.ssp.uninoxus.dto.AlunoTurmaDTO;
 import com.ssp.uninoxus.dto.CriarAlunoDTO;
-
 import com.ssp.uninoxus.service.AlunoService;
 
 import jakarta.validation.Valid;
@@ -31,8 +31,8 @@ public class AlunoController {
 	
 	
 	@GetMapping("{idTurma}/alunosturma")
-	public ResponseEntity<List<AlunoResponseDTO>> TodosAlunosTurma(@PathVariable Long idTurma){
-		List<AlunoResponseDTO> lista = alunoService.findAllByTurma(idTurma); 
+	public ResponseEntity<List<AlunoTurmaDTO>> TodosAlunosTurma(@PathVariable Long idTurma){
+		List<AlunoTurmaDTO> lista = alunoService.findAllByTurma(idTurma); 
 		return ResponseEntity.ok(lista);}  
 
 	@PostMapping 

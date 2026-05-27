@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssp.uninoxus.enums.StatusProva;
 import com.ssp.uninoxus.enums.TipoAvaliacao;
 
 import jakarta.persistence.Column;
@@ -28,6 +29,8 @@ public class Avaliacao {
     private LocalDate data;
 	@Enumerated(EnumType.STRING)
 	TipoAvaliacao tipoAvaliacao; 
+	@Enumerated(EnumType.STRING)
+	StatusProva statusProva;
 	
     @ManyToOne 
     @JoinColumn(name = "id_turma", nullable = false)  
@@ -39,7 +42,7 @@ public class Avaliacao {
    
 
 	public Avaliacao(Long idAvaliacao, String descricaoAvaliacao, LocalDate data, TipoAvaliacao tipoAvaliacao,
-			Turma turma, Set<Nota> notas) {
+			Turma turma, Set<Nota> notas, StatusProva statusProva) {
 	
 		this.idAvaliacao = idAvaliacao;
 		this.descricaoAvaliacao = descricaoAvaliacao;
@@ -47,6 +50,7 @@ public class Avaliacao {
 		this.tipoAvaliacao = tipoAvaliacao;
 		this.turma = turma;
 		this.notas = notas;
+		this.statusProva = statusProva;
 	}
 
 	public Avaliacao() {
@@ -97,6 +101,14 @@ public class Avaliacao {
 
 	public void setNotas(Set<Nota> notas) {
 		this.notas = notas;
+	}
+
+	public StatusProva getStatusProva() {
+		return statusProva;
+	}
+
+	public void setStatusProva(StatusProva statusProva) {
+		this.statusProva = statusProva;
 	}
 
 }
