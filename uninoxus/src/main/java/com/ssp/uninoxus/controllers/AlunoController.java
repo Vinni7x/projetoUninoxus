@@ -34,7 +34,12 @@ public class AlunoController {
 	public ResponseEntity<List<AlunoTurmaDTO>> TodosAlunosTurma(@PathVariable Long idTurma){
 		List<AlunoTurmaDTO> lista = alunoService.findAllByTurma(idTurma); 
 		return ResponseEntity.ok(lista);}  
-
+	
+	@GetMapping("{idTurma}/solicitacaoalunos")
+	public ResponseEntity<List<AlunoTurmaDTO>> TodosAlunosSolicitados(@PathVariable Long idTurma){
+		List<AlunoTurmaDTO> lista = alunoService.findAllByMatriculaSolicitada(idTurma); 
+		return ResponseEntity.ok(lista);}  
+ 
 	@PostMapping 
     public ResponseEntity<AlunoResponseDTO> insert (@RequestBody @Valid CriarAlunoDTO dto){ 
 		

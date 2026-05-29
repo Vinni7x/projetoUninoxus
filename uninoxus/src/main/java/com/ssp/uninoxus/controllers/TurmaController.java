@@ -46,7 +46,7 @@ public class TurmaController {
 		List<TurmaResponseDTO> lista = turmaService.verTurmaAbertas(idCurso);
 		return ResponseEntity.ok(lista); } 
 	 
-	@PostMapping("/{idTurma}")
+	@PostMapping("/{idTurma}/consolidar")
 	public ResponseEntity<?> consolidar(@PathVariable Long idTurma) { 
 	    try {
 	        turmaService.consolidar(idTurma);

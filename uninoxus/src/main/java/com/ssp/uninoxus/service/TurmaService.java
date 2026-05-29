@@ -145,7 +145,7 @@ public class TurmaService {
                     t.getHorarioFinal(),
                     t.getLocal(),
                     t.getDiasSemana(), 
-                    t.getStatusTurma()
+                    t.getStatusTurma() 
                 ));
             }
         }

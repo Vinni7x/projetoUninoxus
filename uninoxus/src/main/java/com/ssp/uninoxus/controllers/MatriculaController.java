@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,7 +34,7 @@ public class MatriculaController {
 		return ResponseEntity.status(201).body(matriculaService.adicionar(dto)); 
 	}
 	 
-	@PatchMapping("/{idMatricula}/cancelar")
+	@PostMapping("/{idMatricula}/cancelar")
 	public ResponseEntity<Void> cancelar(@PathVariable Long idMatricula) {
 	    matriculaService.cancelar(idMatricula);
 	    return ResponseEntity.noContent().build();
@@ -45,6 +44,12 @@ public class MatriculaController {
 	public ResponseEntity<List<NotaAlunoDTO>> verNotas (@PathVariable Long matriculaAluno){
 		List<NotaAlunoDTO> lista = matriculaService.verNotasAluno(matriculaAluno);
 		return ResponseEntity.ok(lista); 
+	}
+	
+	@PostMapping("/{idMatricula}/matricular")
+	public ResponseEntity<Void> autorizarMatricula(@PathVariable Long idMatricula) {
+	    matriculaService.autorizarMatricula(idMatricula); 
+	    return ResponseEntity.noContent().build(); 
 	}
     
 }

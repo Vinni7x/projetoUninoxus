@@ -100,6 +100,25 @@ public class AlunoService {
 		  
 		    return toDTO(aluno);    
 		}
+		public List<AlunoTurmaDTO> findAllByMatriculaSolicitada(Long idTurma) {
+		    List<Aluno> alunos = alunoRepository.findByMatriculas_Turma_IdTurma(idTurma);
+		    List<AlunoTurmaDTO> lista = new ArrayList<>();
+ 
+		    for (Aluno a : alunos) {
+		        for (Matricula m : a.getMatricula()) {
+		            if (m.getTurma().getIdTurma().equals(idTurma)
+		                    && m.getStatusMatricula() == StatusMatricula.SOLICITADA) {
+		                lista.add(new AlunoTurmaDTO(
+		                    m.getIdMatricula(),
+		                    m.getTurma().getIdTurma(),
+		                    a.getNomePessoa() ) );
+		                break; 
+		            }
+		        }
+		    }
+
+		    return lista;
+		}
  
 	 
 	 private AlunoResponseDTO toDTO(Aluno aluno) { 

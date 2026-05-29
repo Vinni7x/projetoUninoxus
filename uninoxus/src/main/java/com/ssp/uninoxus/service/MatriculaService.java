@@ -19,6 +19,8 @@ import com.ssp.uninoxus.repositories.MatriculaRepository;
 import com.ssp.uninoxus.repositories.NotaRepository;
 import com.ssp.uninoxus.repositories.TurmaRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class MatriculaService {
 	
@@ -33,47 +35,31 @@ public class MatriculaService {
 	private NotaRepository notaRepository;
 	
 	  
-	public MatriculaResponseDTO adicionar (CriarMatriculaDTO dto) {
-		 Turma turma = turmaRepository.findById(dto.idTurma())
-		            .orElseThrow(() -> new IllegalArgumentException("Turma não encontrado!"));
-		 Aluno aluno = alunoRepository.findById(dto.matriculaAluno())
-		            .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrada!"));
-		 
-		  if (turma.getStatusTurma() != StatusTurma.ABERTA) {
-	            throw new IllegalArgumentException("Turma não está aberta para matrículas!");
-	        }
-		  long matriculasAtivas = 0;
-		  for (Matricula m : turma.getMatriculas()) {
-		      if (m.getStatusMatricula() == StatusMatricula.MATRICULADO) { 
-		          matriculasAtivas++;
-		      }
-		  }
-		  
-		  if (matriculasAtivas == turma.getVagas()) {
-	            throw new IllegalArgumentException("Turma sem vagas disponíveis!"); 
-	        }
-		  
-		  if (matriculaRepository.existsByAluno_MatriculaAlunoAndTurma_IdTurma(aluno.getMatriculaAluno(), turma.getIdTurma())) {
-	            throw new IllegalArgumentException("Aluno já matriculado nessa turma!");
-	        }
-		   
-		  
-		   Matricula matricula = new Matricula();
-	        matricula.setAluno(aluno);
-	        matricula.setTurma(turma);
-	        matricula.setStatusMatricula(StatusMatricula.MATRICULADO);
- 
-	        matriculaRepository.save(matricula);
-	        
-	        if (matriculasAtivas + 1 == turma.getVagas()) {
-	        	 
-	        	turma.setStatusTurma(StatusTurma.FECHADA);
-	  	        turmaRepository.save(turma); 
-	        }
-
-	        return toDTO(matricula); 
+	@Transactional
+	public MatriculaResponseDTO adicionar(CriarMatriculaDTO dto) {
+	    Turma turma = turmaRepository.findById(dto.idTurma())
+	            .orElseThrow(() -> new IllegalArgumentException("Turma não encontrada!"));
+	            
+	    Aluno aluno = alunoRepository.findById(dto.matriculaAluno())
+	            .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado!"));
+	     
+	    if (turma.getStatusTurma() != StatusTurma.ABERTA) {
+	        throw new IllegalArgumentException("Turma não está aberta para matrículas!");
 	    }
-	
+	     
+	    if (matriculaRepository.existsByAluno_MatriculaAlunoAndTurma_IdTurma(aluno.getMatriculaAluno(), turma.getIdTurma())) {
+	        throw new IllegalArgumentException("Aluno já solicitou a matricula nessa turma!");
+	    }
+	       
+	    Matricula matricula = new Matricula();
+	    matricula.setAluno(aluno);
+	    matricula.setTurma(turma);
+	    matricula.setStatusMatricula(StatusMatricula.SOLICITADA);
+
+	    matriculaRepository.save(matricula);
+	   
+	    return toDTO(matricula); 
+	}
 	
 	
 	public void cancelar(Long idMatricula) {
@@ -231,6 +217,18 @@ public class MatriculaService {
 
 		    matriculaRepository.save(matricula);
 		}
+	 
+	 
+	 public void autorizarMatricula (Long idMatricula) {
+		 Matricula matricula = matriculaRepository.findById(idMatricula) 
+ 	            .orElseThrow(() -> new IllegalArgumentException("Matricula não encontrada!"));
+ 	 
+        matricula.setStatusMatricula(StatusMatricula.MATRICULADO);
+        
+        matriculaRepository.save(matricula);  
+ }
+		 
+	 
 	 
 	
 	 private MatriculaResponseDTO toDTO(Matricula matricula) {
