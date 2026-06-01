@@ -45,12 +45,27 @@ public class NotaService {
 	        notaRepository.save(nota);
 	        return toNotaDTO(nota);
 	    } 
+
+	 public NotaResponseDTO notaPorAvaliacao (Long idAvaliacao) {
+		 Nota nota = notaRepository.findByAvaliacao_IdAvaliacao(idAvaliacao);
+		 
+		 return toNotaDTO(nota); 
+	 } 
+	
+	 public void deletar(Long idNota) {
+	        if (!matriculaRepository.existsById(idNota)) {
+	            throw new IllegalArgumentException("Nota não encontrada, impossível apagar!");
+	        }
+	        matriculaRepository.deleteById(idNota); 
+	    }
+	 
 	 
 	  private NotaResponseDTO toNotaDTO(Nota nota) { 
 	        return new NotaResponseDTO(
 	            nota.getNota(),
 	            nota.getMatricula().getAluno().getNomePessoa(),
-	            nota.getAvaliacao().getTurma().getDisciplina().getNomeDisciplina() 
+	            nota.getAvaliacao().getTurma().getDisciplina().getNomeDisciplina(),
+	            nota.getAvaliacao().getIdAvaliacao()
 	        );
 	    }
 	}

@@ -15,7 +15,9 @@ public interface NotaRepository extends JpaRepository <Nota, Long> {
 
 	Optional<Nota> findByAvaliacao_IdAvaliacaoAndMatricula_IdMatricula(Long idAvaliacao, Long idMatricula);
 
-	Optional<Nota> findByMatricula_IdMatriculaAndAvaliacao_TipoAvaliacao(Long idMatricula, TipoAvaliacao tipoAvaliacao); 
+	Optional<Nota> findByMatricula_IdMatriculaAndAvaliacao_TipoAvaliacao(Long idMatricula, TipoAvaliacao tipoAvaliacao);
+
+	Nota findByAvaliacao_IdAvaliacao(Long idAvaliacao);  
 
 }   
  

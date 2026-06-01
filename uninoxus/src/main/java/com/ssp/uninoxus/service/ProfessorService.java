@@ -86,6 +86,13 @@ public class ProfessorService {
 		    return toDTO(professor);    
 		}
 	 
+	 public void deletar(Long matriculaProfessor) {
+	        if (!professorRepository.existsById(matriculaProfessor)) {
+	            throw new IllegalArgumentException("Professor não encontrado, impossível apagar!");
+	        }
+	        professorRepository.deleteById(matriculaProfessor); 
+	    }
+	 
 	 private ProfessorResponseDTO toDTO(Professor professor) { 
 	        return new ProfessorResponseDTO(
 	        professor.getMatriculaProfessor(),

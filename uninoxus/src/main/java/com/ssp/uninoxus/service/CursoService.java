@@ -25,7 +25,7 @@ public class CursoService {
 	        curso.setNomeCurso(dto.nomeCurso());
 	        curso.setCargaHorariaTotal(dto.cargaHorariaTotal());
 	      
-	       
+	        
 	        cursoRepository.save(curso);
 	        return toDTO(curso);  
 		  

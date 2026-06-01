@@ -23,7 +23,7 @@ public class AlunoService {
 	@Autowired
 	private CursoRepository cursoRepository;
 	
-	public List<AlunoTurmaDTO> findAllByTurma(Long idTurma) {
+	public List<AlunoTurmaDTO> findAllAlunosByTurma(Long idTurma) {
 	    List<Aluno> alunos = alunoRepository.findByMatriculas_Turma_IdTurma(idTurma);
 	    List<AlunoTurmaDTO> lista = new ArrayList<>();
 
@@ -118,8 +118,14 @@ public class AlunoService {
 		    }
 
 		    return lista;
-		}
- 
+		} 
+  
+		 public void deletar(Long matriculaAluno) {
+		        if (!alunoRepository.existsById(matriculaAluno)) {
+		            throw new IllegalArgumentException("Aluno não encontrado, impossível apagar!");
+		        }
+		        alunoRepository.deleteById(matriculaAluno); 
+		    }
 	 
 	 private AlunoResponseDTO toDTO(Aluno aluno) { 
 	        return new AlunoResponseDTO( 

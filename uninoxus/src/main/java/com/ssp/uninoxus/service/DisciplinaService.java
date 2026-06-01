@@ -40,6 +40,16 @@ public class DisciplinaService {
 		        return toDTO(disciplina);  
 			}
 		
+		
+		
+		
+		 public void deletar(Long idDisciplina) {
+		        if (!disciplinaRepository.existsById(idDisciplina)) {
+		            throw new IllegalArgumentException("Disciplina não encontrada, impossível apagar!");
+		        }
+		        disciplinaRepository.deleteById(idDisciplina); 
+		    }
+		
 		 private DisciplinaResponseDTO toDTO(Disciplina disciplina) {
 		        return new DisciplinaResponseDTO(
 		            

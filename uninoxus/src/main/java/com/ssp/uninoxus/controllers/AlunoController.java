@@ -32,7 +32,7 @@ public class AlunoController {
 	
 	@GetMapping("{idTurma}/alunosturma")
 	public ResponseEntity<List<AlunoTurmaDTO>> TodosAlunosTurma(@PathVariable Long idTurma){
-		List<AlunoTurmaDTO> lista = alunoService.findAllByTurma(idTurma); 
+		List<AlunoTurmaDTO> lista = alunoService.findAllAlunosByTurma(idTurma); 
 		return ResponseEntity.ok(lista);}  
 	
 	@GetMapping("{idTurma}/solicitacaoalunos")

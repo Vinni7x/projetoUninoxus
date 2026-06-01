@@ -120,15 +120,6 @@ public class TurmaService {
     
    
     
-
-    public void deletar(Long idTurma) {
-        if (idTurma != null && turmaRepository.existsById(idTurma)) {
-            turmaRepository.deleteById(idTurma);
-        } else {
-            throw new IllegalArgumentException("Turma não encontrada, impossível apagar!");
-        }
-    }
-    
     public List<TurmaMatriculadoDTO> turmasMatriculado(Long matriculaAluno) {
         List<Matricula> matriculas = matriculaRepository
             .findByAluno_MatriculaAlunoAndStatusMatricula(matriculaAluno, StatusMatricula.MATRICULADO);
@@ -148,28 +139,40 @@ public class TurmaService {
                     t.getStatusTurma() 
                 ));
             }
-        }
+        } 
         return lista;
     }
      
+    public List<TurmaResponseDTO> verTurmasAbertas(Long idCurso, Long matriculaAluno) {
+        List<Turma> turmasAbertas = turmaRepository
+            .findByCursoIdCursoAndStatusTurma(idCurso, StatusTurma.ABERTA);
 
-    	
-    	
-    	public List<TurmaResponseDTO> verTurmaAbertas(Long idCurso) {
-    	    List<Turma> turmasAbertas = turmaRepository.findByCursoIdCursoAndStatusTurma(idCurso, StatusTurma.ABERTA);
-    	    List<TurmaResponseDTO> lista = new ArrayList<>();
-    	    
-    	    for (Turma turma : turmasAbertas) { 
-    	        TurmaResponseDTO turmas = toDTO(turma);
-    	        lista.add(turmas);
-    	    }
-    	    return lista;
-    	}  
-    	
+        List<TurmaResponseDTO> lista = new ArrayList<>();
+
+        for (Turma turma : turmasAbertas) {
+            boolean alunoJaSolicitou = false;
+
+            for (Matricula m : turma.getMatriculas()) {
+                if (m.getAluno().getMatriculaAluno().equals(matriculaAluno) 
+                    && m.getStatusMatricula() == StatusMatricula.SOLICITADA 
+                    || m.getStatusMatricula() == StatusMatricula.MATRICULADO ) {
+                    alunoJaSolicitou = true;
+                    break; 
+                }
+            }
+  
+            if (!alunoJaSolicitou) {
+                lista.add(toDTO(turma));
+            }
+        }
+
+        return lista;
+    }
+    
     public List<TurmaMinistradaDTO> turmasMinistradas(Long matriculaProfessor) {
     	    List<Turma> turmas = turmaRepository.findByProfessorMatriculaProfessor(matriculaProfessor);
 
-    	    List<TurmaMinistradaDTO> lista = new ArrayList<>(); 
+    	    List<TurmaMinistradaDTO> lista = new ArrayList<>();  
     	    for (Turma t : turmas) {  
     	        if (t.getStatusTurma() != StatusTurma.CONSOLIDADA) {
     	           
@@ -188,8 +191,16 @@ public class TurmaService {
     	    return lista;
     	}
     	    
-    	
     
+
+    public void deletar(Long idTurma) {
+        if (idTurma != null && turmaRepository.existsById(idTurma)) {
+            turmaRepository.deleteById(idTurma);
+        } else {
+            throw new IllegalArgumentException("Turma não encontrada, impossível apagar!");
+        }
+    }
+    	
 
     
     private TurmaResponseDTO toDTO(Turma turma) {

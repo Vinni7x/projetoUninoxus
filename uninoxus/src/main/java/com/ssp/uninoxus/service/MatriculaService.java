@@ -228,6 +228,13 @@ public class MatriculaService {
         matriculaRepository.save(matricula);  
  }
 		 
+		
+	 public void deletar(Long idMatricula) {
+	        if (!matriculaRepository.existsById(idMatricula)) {
+	            throw new IllegalArgumentException("Matricula não encontrada, impossível apagar!");
+	        }
+	        matriculaRepository.deleteById(idMatricula); 
+	    }
 	 
 	 
 	

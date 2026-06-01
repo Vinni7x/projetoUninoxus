@@ -41,10 +41,10 @@ public class TurmaController {
 		  
 	}
 	
-	@GetMapping("/{idCurso}")
-	public ResponseEntity<List<TurmaResponseDTO>> turmasAbertas(@PathVariable Long idCurso){
-		List<TurmaResponseDTO> lista = turmaService.verTurmaAbertas(idCurso);
-		return ResponseEntity.ok(lista); } 
+	@GetMapping("/{idCurso}/turmasabertas/{matriculaAluno}") 
+	public ResponseEntity<List<TurmaResponseDTO>> turmasAbertas(@PathVariable Long idCurso, @PathVariable Long matriculaAluno ){
+		List<TurmaResponseDTO> lista = turmaService.verTurmasAbertas(idCurso, matriculaAluno);
+		return ResponseEntity.ok(lista); }  
 	 
 	@PostMapping("/{idTurma}/consolidar")
 	public ResponseEntity<?> consolidar(@PathVariable Long idTurma) { 
