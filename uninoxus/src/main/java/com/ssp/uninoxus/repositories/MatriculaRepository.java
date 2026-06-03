@@ -22,9 +22,11 @@ public interface MatriculaRepository extends JpaRepository <Matricula, Long>{
 	  List<Matricula> findByAluno_MatriculaAlunoAndStatusMatriculaIn(Long matriculaAluno,
 			List<StatusMatricula> statusAlvo);
 
+	long countByAluno_MatriculaAlunoAndStatusMatriculaIn(Long matriculaAluno, List<StatusMatricula> statusConsolidados);
+
 	 
  
 	  
-
+ 
 	   
 }      

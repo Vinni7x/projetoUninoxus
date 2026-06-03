@@ -162,62 +162,78 @@ public class MatriculaService {
 			    return lista; 
 		 
 	 }
-	 
+	 @Transactional
 	 public void consolidarMatricula(Long idMatricula) {
-		    Matricula matricula = matriculaRepository.findById(idMatricula)
-		        .orElseThrow(() -> new IllegalArgumentException("Matrícula não encontrada!"));
+	     Matricula matricula = matriculaRepository.findById(idMatricula)
+	         .orElseThrow(() -> new IllegalArgumentException("Matrícula não encontrada!"));
 
-		    if (matricula.getTurma().getStatusTurma() != StatusTurma.CONSOLIDADA) {
-		        throw new IllegalArgumentException("Turma ainda não foi consolidada!");
-		    }
+	     if (matricula.getTurma().getStatusTurma() != StatusTurma.CONSOLIDADA) {
+	         throw new IllegalArgumentException("Turma ainda não foi consolidada!");
+	     }
 
-		    Double p1 = getNotaNullable(idMatricula, TipoAvaliacao.AV1);
-		    Double p2 = getNotaNullable(idMatricula, TipoAvaliacao.AV2);
-		    Double p3 = getNotaNullable(idMatricula, TipoAvaliacao.AV3);
+	     Double p1 = getNotaNullable(idMatricula, TipoAvaliacao.AV1);
+	     Double p2 = getNotaNullable(idMatricula, TipoAvaliacao.AV2);
+	     Double p3 = getNotaNullable(idMatricula, TipoAvaliacao.AV3);
 
-		    double media = (p1 + p2 + p3) / 3;
+	     double media = (p1 + p2 + p3) / 3;
 
-		    if (media >= 7) {
-		        matricula.setMediaFinal(media);
-		        matricula.setStatusMatricula(StatusMatricula.APROVADO);
-		        matriculaRepository.save(matricula);
-		        return;
-		    }
+	     Double reposicao = getNotaNullable(idMatricula, TipoAvaliacao.REPOSICAO);
+	     double menorNota = Math.min(p1, Math.min(p2, p3));
 
-		    Double reposicao = getNotaNullable(idMatricula, TipoAvaliacao.REPOSICAO);
-		    double menorNota = Math.min(p1, Math.min(p2, p3));
+	     if (media < 7 && reposicao != null && reposicao > menorNota) {
+	         if (p1 <= p2 && p1 <= p3) {
+	             media = (reposicao + p2 + p3) / 3;
+	         } else if (p2 <= p1 && p2 <= p3) {
+	             media = (p1 + reposicao + p3) / 3;
+	         } else {
+	             media = (p1 + p2 + reposicao) / 3;
+	         }
+	     }
 
-		    if (reposicao != null && reposicao > menorNota) {
-		        if (p1 <= p2 && p1 <= p3) {
-		            media = (reposicao + p2 + p3) / 3;
-		        } else if (p2 <= p1 && p2 <= p3) {
-		            media = (p1 + reposicao + p3) / 3;
-		        } else {
-		            media = (p1 + p2 + reposicao) / 3;
-		        }
-		    }
+	     if (media < 7) {
+	         Double notaFinal = getNotaNullable(idMatricula, TipoAvaliacao.FINAL);
+	         double mediaComFinal = (media + notaFinal) / 2;
+	         media = mediaComFinal;
+	         matricula.setStatusMatricula(mediaComFinal >= 6 ? StatusMatricula.APROVADO : StatusMatricula.REPROVADO);
+	     } else {
+	         matricula.setStatusMatricula(StatusMatricula.APROVADO);
+	     }
 
-		    if (media >= 7) {
-		        matricula.setMediaFinal(media);
-		        matricula.setStatusMatricula(StatusMatricula.APROVADO);
-		        matriculaRepository.save(matricula);
-		        return;
-		    }
-
-		    Double notaFinal = getNotaNullable(idMatricula, TipoAvaliacao.FINAL);
-		    double mediaComFinal = (media + notaFinal) / 2;
-
-		    if (mediaComFinal >= 6) {
-		        matricula.setMediaFinal(mediaComFinal);
-		        matricula.setStatusMatricula(StatusMatricula.APROVADO);
-		    } else {
-		        matricula.setMediaFinal(mediaComFinal);
-		        matricula.setStatusMatricula(StatusMatricula.REPROVADO);
-		    }
-
-		    matriculaRepository.save(matricula);
-		}
+	     matricula.setMediaFinal(media);
+	     matriculaRepository.save(matricula);
+	     atualizarCR(matricula.getAluno(), media); 
+	 }
 	 
+	 private void atualizarCR(Aluno aluno, Double mediaFinal) {
+		    System.out.println(">>> atualizarCR chamado para aluno: " + aluno.getMatriculaAluno());
+		    
+		    Aluno alunoAtualizado = alunoRepository.findById(aluno.getMatriculaAluno())
+		        .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado!"));
+
+		    System.out.println(">>> Aluno encontrado: " + alunoAtualizado.getNomePessoa());
+		    System.out.println(">>> CR atual: " + alunoAtualizado.getRedimentoAcademico());
+
+		    List<StatusMatricula> statusConsolidados = List.of(
+		        StatusMatricula.APROVADO,
+		        StatusMatricula.REPROVADO
+		    );
+
+		    long totalConsolidadas = matriculaRepository
+		        .countByAluno_MatriculaAlunoAndStatusMatriculaIn(alunoAtualizado.getMatriculaAluno(), statusConsolidados);
+
+		    System.out.println(">>> Total consolidadas: " + totalConsolidadas);
+
+		    Double crAtual = alunoAtualizado.getRedimentoAcademico();
+		    if (crAtual == null) crAtual = 0.0;
+
+		    Double novoCR = (crAtual * (totalConsolidadas - 1) + mediaFinal) / totalConsolidadas;
+		    System.out.println(">>> Novo CR calculado: " + novoCR);
+
+		    alunoAtualizado.setRedimentoAcademico(novoCR);
+		    alunoRepository.save(alunoAtualizado);
+		    
+		    System.out.println(">>> Save executado. CR salvo: " + alunoAtualizado.getRedimentoAcademico());
+		}
 	 
 	 public void autorizarMatricula (Long idMatricula) {
 		 Matricula matricula = matriculaRepository.findById(idMatricula) 

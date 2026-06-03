@@ -1,6 +1,9 @@
 package com.ssp.uninoxus.service;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.ssp.uninoxus.dto.LancarNotaDTO;
 import com.ssp.uninoxus.dto.NotaResponseDTO;
 import com.ssp.uninoxus.entities.Avaliacao;
@@ -51,7 +54,19 @@ public class NotaService {
 		 
 		 return toNotaDTO(nota); 
 	 } 
+	 
+	 public NotaResponseDTO notaPorAvaliacaoEMatricula(Long idAvaliacao, Long idMatricula) {
+		    Optional<Nota> optional = notaRepository
+		        .findByAvaliacao_IdAvaliacaoAndMatricula_IdMatricula(idAvaliacao, idMatricula);
+
+		    if (optional.isPresent()) {
+		        return toNotaDTO(optional.get());
+		    }
+
+		    return null;
+		} 
 	
+	 
 	 public void deletar(Long idNota) {
 	        if (!matriculaRepository.existsById(idNota)) {
 	            throw new IllegalArgumentException("Nota não encontrada, impossível apagar!");

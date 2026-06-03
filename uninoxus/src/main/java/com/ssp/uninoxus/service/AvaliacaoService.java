@@ -1,14 +1,17 @@
 package com.ssp.uninoxus.service;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.ssp.uninoxus.dto.AvaliacaoResponseDTO;
 import com.ssp.uninoxus.dto.CriarAvaliacaoDTO;
 import com.ssp.uninoxus.entities.Avaliacao;
 import com.ssp.uninoxus.entities.Turma;
 import com.ssp.uninoxus.enums.StatusMatricula;
 import com.ssp.uninoxus.enums.StatusProva;
+import com.ssp.uninoxus.enums.StatusTurma;
 import com.ssp.uninoxus.repositories.AvaliacaoRepository;
 import com.ssp.uninoxus.repositories.TurmaRepository;
 
@@ -86,7 +89,7 @@ public class AvaliacaoService {
     
     
     public List<AvaliacaoResponseDTO> avaliacoesDoProfessor(Long matriculaProfessor) {
-        List<Avaliacao> avaliacoes = avaliacaoRepository.findByTurma_Professor_MatriculaProfessor(matriculaProfessor);
+    	List<Avaliacao> avaliacoes = avaliacaoRepository.findByTurma_Professor_MatriculaProfessorAndTurma_StatusTurma(matriculaProfessor, StatusTurma.ABERTA);
 
         List<AvaliacaoResponseDTO> lista = new ArrayList<>();
         for (Avaliacao a : avaliacoes) {

@@ -34,5 +34,14 @@ public class NotaController {
 	@GetMapping("/{idAvaliacao}")
 	public ResponseEntity <NotaResponseDTO> notaPorAvaliacao(@PathVariable Long idAvaliacao){
 		return ResponseEntity.status(200).body(notaService.notaPorAvaliacao(idAvaliacao));}
-	}
+	
 	  	
+	@GetMapping("/{idAvaliacao}/{idMatricula}")
+	public ResponseEntity<NotaResponseDTO> notaPorAvaliacaoEMatricula(@PathVariable Long idAvaliacao,
+        @PathVariable Long idMatricula) {
+
+    NotaResponseDTO nota = notaService.notaPorAvaliacaoEMatricula(idAvaliacao, idMatricula);
+
+    if (nota == null) return ResponseEntity.noContent().build(); 
+    return ResponseEntity.ok(nota);}
+}
