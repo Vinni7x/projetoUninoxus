@@ -1,4 +1,5 @@
 package com.ssp.uninoxus.service;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,15 @@ public class DisciplinaService {
 		@Autowired
 		private CursoRepository cursoRepository; 
 		
-		public List<Disciplina> listar() {
-			return disciplinaRepository.findAll();
-		}
+		public List<DisciplinaResponseDTO> listarPorCurso(Long idCurso) { 
+			List<Disciplina> disciplinas = disciplinaRepository.findByCurso_IdCurso(idCurso);
+			List<DisciplinaResponseDTO> lista = new ArrayList<>();
+			  
+			for(Disciplina d: disciplinas) {
+				lista.add(toDTO(d));
+			}
+			return lista;  
+		} 
 			
 		public DisciplinaResponseDTO adicionar (CriarDisciplinaDTO dto) {  
 			  boolean disciplinaJaExiste = disciplinaRepository.existsByNomeDisciplinaIgnoreCase(dto.nomeDisciplina());
@@ -40,8 +47,22 @@ public class DisciplinaService {
 		        return toDTO(disciplina);  
 			}
 		
+		public List<DisciplinaResponseDTO> listarTodasDisciplina (){
+			List<Disciplina> disciplinas = disciplinaRepository.findAll();
+			 List<DisciplinaResponseDTO> lista = new ArrayList<>();
+			 
+			 for(Disciplina d: disciplinas) {
+				 lista.add(toDTO(d));
+			 }
+			 return lista; 
+		}
 		
-		
+		 public DisciplinaResponseDTO listarPorId(Long idDisciplina){ 
+		    	Disciplina disciplina = disciplinaRepository.findById(idDisciplina)
+		    			.orElseThrow(() -> new IllegalArgumentException("Disciplina" + idDisciplina+ " não encontrado!"));
+		        ;
+		    	return toDTO(disciplina); 
+		    } 
 		
 		 public void deletar(Long idDisciplina) {
 		        if (!disciplinaRepository.existsById(idDisciplina)) {
@@ -52,7 +73,7 @@ public class DisciplinaService {
 		
 		 private DisciplinaResponseDTO toDTO(Disciplina disciplina) {
 		        return new DisciplinaResponseDTO(
-		            
+		        disciplina.getIdDisciplina(),
 		        disciplina.getNomeDisciplina(),   
 		        disciplina.getCargaHoraria(),
 		        disciplina.getCurso().getNomeCurso()

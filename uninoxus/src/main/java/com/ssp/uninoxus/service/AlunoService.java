@@ -25,19 +25,33 @@ public class AlunoService {
 	
 	public List<AlunoTurmaDTO> findAllAlunosByTurma(Long idTurma) {
 	    List<Aluno> alunos = alunoRepository.findByMatriculas_Turma_IdTurma(idTurma);
-	    List<AlunoTurmaDTO> lista = new ArrayList<>();
+	    List<AlunoTurmaDTO> lista = new ArrayList<>(); 
 
 	    for (Aluno a : alunos) {
 	        for (Matricula m : a.getMatricula()) {
 	            if (m.getTurma().getIdTurma().equals(idTurma)
 	                    && m.getStatusMatricula() == StatusMatricula.MATRICULADO) {
-	                lista.add(new AlunoTurmaDTO(
-	                    m.getIdMatricula(),
-	                    m.getTurma().getIdTurma(),
-	                    a.getNomePessoa() ) );
+	            	lista.add(toDTOAlunoTurma(m));
 	                break; 
 	            }
 	        }
+	    }
+
+	    return lista;
+	}
+	
+	public List<AlunoTurmaDTO> findAllAlunosSolicitados(Long idTurma) {
+	    List<Aluno> alunos = alunoRepository.findByMatriculas_Turma_IdTurma(idTurma);
+	    List<AlunoTurmaDTO> lista = new ArrayList<>();
+ 
+	    for (Aluno a : alunos) {
+	        for (Matricula m : a.getMatricula()) {
+	            if (m.getTurma().getIdTurma().equals(idTurma)
+	                    && m.getStatusMatricula() == StatusMatricula.SOLICITADA) {
+	                lista.add(toDTOAlunoTurma(m));
+	                break; 
+	            } 
+	        } 
 	    }
 
 	    return lista;
@@ -108,10 +122,7 @@ public class AlunoService {
 		        for (Matricula m : a.getMatricula()) {
 		            if (m.getTurma().getIdTurma().equals(idTurma)
 		                    && m.getStatusMatricula() == StatusMatricula.SOLICITADA) {
-		                lista.add(new AlunoTurmaDTO(
-		                    m.getIdMatricula(),
-		                    m.getTurma().getIdTurma(),
-		                    a.getNomePessoa() ) );
+		                lista.add(toDTOAlunoTurma(m)); 
 		                break; 
 		            }
 		        }
@@ -126,6 +137,16 @@ public class AlunoService {
 		        }
 		        alunoRepository.deleteById(matriculaAluno); 
 		    }
+		 
+		 public List<AlunoResponseDTO> listarTodosAlunos(){
+			 List<Aluno> alunos = alunoRepository.findAll();
+			 List<AlunoResponseDTO> lista = new ArrayList<>();
+			 
+			 for(Aluno a: alunos) { 
+				 lista.add(toDTO(a));
+			 }
+			 return lista;
+		 }
 	 
 	 private AlunoResponseDTO toDTO(Aluno aluno) { 
 	        return new AlunoResponseDTO( 
@@ -136,5 +157,15 @@ public class AlunoService {
 	        
 	        ); 
 	    }
+	 
+	 
+	 private AlunoTurmaDTO toDTOAlunoTurma(Matricula matricula) {
+		 
+		return new AlunoTurmaDTO(
+                 matricula.getIdMatricula(),
+                 matricula.getTurma().getIdTurma(),
+                 matricula.getAluno().getNomePessoa()); 
+		 
+	 } 
 	
 }

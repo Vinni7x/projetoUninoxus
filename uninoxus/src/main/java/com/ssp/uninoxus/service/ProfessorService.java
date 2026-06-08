@@ -1,8 +1,8 @@
 package com.ssp.uninoxus.service;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.ssp.uninoxus.dto.CriarProfessorDTO;
 import com.ssp.uninoxus.dto.ProfessorResponseDTO;
 import com.ssp.uninoxus.entities.Curso;
@@ -19,10 +19,24 @@ public class ProfessorService {
 	@Autowired
 	private CursoRepository cursoRepository;
 
-	public List <Professor> findAll(){ 
-		return professorRepository.findAll();
+	public List <ProfessorResponseDTO> listarProfessorporCurso(Long idCurso){
+		List<Professor> professores = professorRepository.findByCurso_IdCurso(idCurso);
+		 List<ProfessorResponseDTO> lista = new ArrayList<>();
+		for(Professor p: professores) {
+			lista.add(toDTO(p));
+		} 
+		return lista; 
 	}
 	
+	public List<ProfessorResponseDTO> listarTodosProfessores(){
+		List<Professor> professores = professorRepository.findAll();
+		List<ProfessorResponseDTO> lista = new ArrayList<>();
+		for(Professor p: professores) {
+			lista.add(toDTO(p));
+		}
+		return lista; 
+	}
+	 
 	public ProfessorResponseDTO adicionar (CriarProfessorDTO dto){
 		 
 		 boolean professorJaExiste = professorRepository.existsByCpf(dto.cpf()); 
@@ -97,6 +111,7 @@ public class ProfessorService {
 	        return new ProfessorResponseDTO(
 	        professor.getMatriculaProfessor(),
 	        professor.getNomePessoa(),  
+	        professor.getCpf(),
 	        professor.getCurso().getNomeCurso()
 	        ); 
 	    }

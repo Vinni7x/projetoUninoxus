@@ -1,10 +1,8 @@
 package com.ssp.uninoxus.service;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.ssp.uninoxus.dto.CriarTurmaDTO;
 import com.ssp.uninoxus.dto.TurmaMatriculadoDTO;
 import com.ssp.uninoxus.dto.TurmaMinistradaDTO;
@@ -190,7 +188,24 @@ public class TurmaService {
     	    } 
     	    return lista;
     	}
-    	    
+    
+    public List<TurmaResponseDTO> listarPorCurso(Long idCurso) { 
+		List<Turma> turmas = turmaRepository.findByCurso_IdCurso(idCurso);
+		List<TurmaResponseDTO> lista = new ArrayList<>();
+		 
+		for(Turma t: turmas) {
+			lista.add(toDTO(t));
+		}
+		return lista;   
+	}
+    	  
+    public TurmaResponseDTO listarPorId(Long idTurma){
+    	Turma turma = turmaRepository.findById(idTurma)
+    			.orElseThrow(() -> new IllegalArgumentException("Turma" + idTurma + " não encontrado!"));
+        ;
+    	return toDTO(turma); 
+    } 
+
     
 
     public void deletar(Long idTurma) {
@@ -201,6 +216,15 @@ public class TurmaService {
         }
     }
     	
+	 public List<TurmaResponseDTO> listarTodasTurmas(){
+		 List<Turma> turmas = turmaRepository.findAll();
+		 List<TurmaResponseDTO> lista = new ArrayList<>();
+		 
+		 for(Turma t: turmas) { 
+			 lista.add(toDTO(t));
+		 }
+		 return lista;
+	 }
 
     
     private TurmaResponseDTO toDTO(Turma turma) {

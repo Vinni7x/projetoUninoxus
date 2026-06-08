@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +22,6 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/alunos")
-@CrossOrigin(origins = "*")
 public class AlunoController {
 	
 	@Autowired
@@ -38,7 +37,7 @@ public class AlunoController {
 	@GetMapping("{idTurma}/solicitacaoalunos")
 	public ResponseEntity<List<AlunoTurmaDTO>> TodosAlunosSolicitados(@PathVariable Long idTurma){
 		List<AlunoTurmaDTO> lista = alunoService.findAllByMatriculaSolicitada(idTurma); 
-		return ResponseEntity.ok(lista);}  
+		return ResponseEntity.ok(lista);}   
  
 	@PostMapping 
     public ResponseEntity<AlunoResponseDTO> insert (@RequestBody @Valid CriarAlunoDTO dto){ 
@@ -52,9 +51,28 @@ public class AlunoController {
 		 return ResponseEntity.ok(alunoService.update(dto, matriculaAluno));    
 	}
 	
+	@GetMapping
+	public ResponseEntity<List<AlunoResponseDTO>> todosAlunos (){
+		
+		List<AlunoResponseDTO> lista = alunoService.listarTodosAlunos();
+		
+		return ResponseEntity.ok(lista);
+		
+	}
+	
 	@GetMapping("/{matriculaAluno}") 
 	public ResponseEntity<AlunoResponseDTO> buscarporID (@PathVariable Long matriculaAluno){
 		return ResponseEntity.status(200).body(alunoService.buscarPorId(matriculaAluno));  
 		
+	}
+	
+	@DeleteMapping( "/{matriculaAluno}")  
+	public  ResponseEntity <Void> deletar (@PathVariable Long matriculaAluno ){
+		try {
+			alunoService.deletar(matriculaAluno);
+			return ResponseEntity.noContent().build(); }
+			catch (RuntimeException e) {
+				return ResponseEntity.notFound().build();
+			} 
 	}
 }  

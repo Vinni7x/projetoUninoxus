@@ -7,8 +7,11 @@ import com.ssp.uninoxus.entities.Curso;
 
 
 
+
 @Repository
 public interface CursoRepository extends JpaRepository <Curso, Long>{
 
 	boolean existsByNomeCursoIgnoreCase(String nomeCurso);
+	
 }
+  

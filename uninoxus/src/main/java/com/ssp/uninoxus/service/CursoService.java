@@ -1,5 +1,9 @@
 package com.ssp.uninoxus.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +18,15 @@ public class CursoService {
 	@Autowired
 	private CursoRepository cursoRepository;
 	
+	
+	public List<CursoResponseDTO> listarTodosCursos() {
+	    List<Curso> cursos = cursoRepository.findAll();
+	    List<CursoResponseDTO> lista = new ArrayList<>();
+	    for (Curso c : cursos) { 
+	        lista.add(toDTO(c));
+	    }
+	    return lista;
+	}
 	
 	public CursoResponseDTO adicionar (CriarCursoDTO dto) {
 		   boolean cursoJaExiste = cursoRepository.existsByNomeCursoIgnoreCase(dto.nomeCurso());
@@ -57,6 +70,13 @@ public class CursoService {
 	        }
 	        cursoRepository.deleteById(idCurso); 
 	    }
+	    
+	    public CursoResponseDTO listarPorId(Long idCurso){
+	    	Curso curso = cursoRepository.findById(idCurso)
+	    			.orElseThrow(() -> new IllegalArgumentException("Curso " + idCurso + " não encontrado!"));
+	        ;
+	    	return toDTO(curso); 
+	    } 
 	
 	    
 	    

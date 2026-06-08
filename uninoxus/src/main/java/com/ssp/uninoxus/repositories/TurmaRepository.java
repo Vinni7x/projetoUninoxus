@@ -13,4 +13,6 @@ public interface TurmaRepository extends JpaRepository <Turma, Long>{
 	List<Turma> findByCursoIdCursoAndStatusTurma(Long idCurso, StatusTurma statusTurma);
 
 	List<Turma> findByProfessorMatriculaProfessor(Long matriculaProfessor);
-}    
+
+	List<Turma> findByCurso_IdCurso(Long idCurso);
+}     
