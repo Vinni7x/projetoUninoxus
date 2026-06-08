@@ -4,5 +4,6 @@ public record DisciplinaResponseDTO(
 		Long idDisicplina,
 	    String nomeDisciplina,
 	    Integer cargaHoraria,
-	    String nomeCurso
+	    String nomeCurso,
+	    Long idCurso
 	) {}

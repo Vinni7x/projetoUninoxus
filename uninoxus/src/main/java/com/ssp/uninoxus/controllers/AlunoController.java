@@ -25,7 +25,7 @@ import jakarta.validation.Valid;
 public class AlunoController {
 	
 	@Autowired
-	private AlunoService alunoService;
+	private AlunoService alunoService; 
 	
 	
 	

@@ -76,7 +76,8 @@ public class DisciplinaService {
 		        disciplina.getIdDisciplina(),
 		        disciplina.getNomeDisciplina(),   
 		        disciplina.getCargaHoraria(),
-		        disciplina.getCurso().getNomeCurso()
+		        disciplina.getCurso().getNomeCurso(),
+		        disciplina.getCurso().getIdCurso()
 		      
 		        		); 
 		    }

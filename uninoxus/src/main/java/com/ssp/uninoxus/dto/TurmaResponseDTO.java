@@ -20,8 +20,11 @@ public record TurmaResponseDTO(
 	    List<DiasSemana> diasSemana,
 	    StatusTurma statusTurma,
 	    String nomeCurso,
+	    Long idCurso,
 	    String nomeDisicplina,
-	    String nomeProfessor) {
+	    Long idDisciplina,
+	    String nomeProfessor,
+	    Long matriculaProfessor) {
 
 }
 

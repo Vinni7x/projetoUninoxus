@@ -238,9 +238,12 @@ public class TurmaService {
             turma.getVagas(),
             turma.getDiasSemana(),
             turma.getStatusTurma(),
-            turma.getCurso().getNomeCurso(), 
+            turma.getCurso().getNomeCurso(),
+            turma.getCurso().getIdCurso(), 
             turma.getDisciplina().getNomeDisciplina(),
-            turma.getProfessor().getNomePessoa()    
+            turma.getDisciplina().getIdDisciplina(),
+            turma.getProfessor().getNomePessoa(),
+            turma.getProfessor().getMatriculaProfessor() 
         );
     }
 

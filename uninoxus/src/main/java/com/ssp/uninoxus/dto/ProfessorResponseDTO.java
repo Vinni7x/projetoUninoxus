@@ -5,7 +5,8 @@ public record ProfessorResponseDTO(
 		Long matriculaProfessor,
 		String nomePessoa,
 		String cpf,
-		String nomeCurso 
+		String nomeCurso,
+		Long matriculaAluno
 		) {
 	
 }

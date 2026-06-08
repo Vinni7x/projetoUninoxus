@@ -112,7 +112,8 @@ public class ProfessorService {
 	        professor.getMatriculaProfessor(),
 	        professor.getNomePessoa(),  
 	        professor.getCpf(),
-	        professor.getCurso().getNomeCurso()
+	        professor.getCurso().getNomeCurso(),
+	        professor.getCurso().getIdCurso()
 	        ); 
 	    }
 	

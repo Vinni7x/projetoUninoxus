@@ -153,7 +153,8 @@ public class AlunoService {
 	        aluno.getMatriculaAluno(),
 	        aluno.getNomePessoa(),
 	        aluno.getRedimentoAcademico(),
-	        aluno.getCurso().getNomeCurso()  
+	        aluno.getCurso().getNomeCurso(),
+	        aluno.getCurso().getIdCurso()
 	        
 	        ); 
 	    }
