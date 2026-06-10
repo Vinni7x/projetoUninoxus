@@ -73,6 +73,11 @@ public class MatriculaService {
 	    if (matricula.getStatusMatricula() != StatusMatricula.MATRICULADO) {
 	        throw new IllegalArgumentException("Não é possível cancelar uma matrícula já consolidada!");
 	    }
+	    Double p1 = getNotaNullable(idMatricula, TipoAvaliacao.AV1);
+	    
+	    if (p1 != null) {
+	        throw new IllegalArgumentException("Não é possível cancelar a primeira nota já foi lançada!");
+	    }
 
 	    matricula.setStatusMatricula(StatusMatricula.CANCELADA);
 	    matriculaRepository.save(matricula);
