@@ -3,6 +3,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.ssp.uninoxus.dto.AlunoResponseDTO;
@@ -114,8 +117,9 @@ public class AlunoService {
 		  
 		    return toDTO(aluno);    
 		}
-		public List<AlunoTurmaDTO> findAllByMatriculaSolicitada(Long idTurma) {
-		    List<Aluno> alunos = alunoRepository.findByMatriculas_Turma_IdTurma(idTurma);
+		public Page<AlunoTurmaDTO> findAllByMatriculaSolicitada(Long idTurma, int pagina, int itens) {
+			PageRequest pageRequest = PageRequest.of(pagina, itens);
+		    Page<Aluno> alunos = alunoRepository.findByMatriculas_Turma_IdTurma(idTurma, pageRequest); 
 		    List<AlunoTurmaDTO> lista = new ArrayList<>();
  
 		    for (Aluno a : alunos) {
@@ -128,7 +132,7 @@ public class AlunoService {
 		        }
 		    }
 
-		    return lista;
+		    return new PageImpl<>(lista, pageRequest, alunos.getTotalElements());
 		} 
   
 		 public void deletar(Long matriculaAluno) {
@@ -138,14 +142,15 @@ public class AlunoService {
 		        alunoRepository.deleteById(matriculaAluno); 
 		    }
 		 
-		 public List<AlunoResponseDTO> listarTodosAlunos(){
-			 List<Aluno> alunos = alunoRepository.findAll();
+		 public Page<AlunoResponseDTO> listarTodosAlunos(int pagina, int itens){
+			 PageRequest pageRequest = PageRequest.of(pagina, itens);
+			 Page<Aluno> alunos = alunoRepository.findAll(pageRequest);
 			 List<AlunoResponseDTO> lista = new ArrayList<>();
 			 
 			 for(Aluno a: alunos) { 
-				 lista.add(toDTO(a));
+				 lista.add(toDTO(a)); 
 			 }
-			 return lista;
+			 return new PageImpl<>(lista, pageRequest, alunos.getTotalElements());
 		 }
 	 
 	 private AlunoResponseDTO toDTO(Aluno aluno) { 

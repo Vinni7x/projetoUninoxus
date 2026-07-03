@@ -3,17 +3,18 @@ package com.ssp.uninoxus.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssp.uninoxus.dto.CriarDisciplinaDTO;
 import com.ssp.uninoxus.dto.DisciplinaResponseDTO;
-
 import com.ssp.uninoxus.service.DisciplinaService;
 
 import jakarta.validation.Valid;
@@ -36,9 +37,9 @@ public class DisciplinaController {
 		return ResponseEntity.ok(lista);}  
 	
 	@GetMapping
-	public ResponseEntity<List<DisciplinaResponseDTO>> listarTodasDiscipnas(){
-		List<DisciplinaResponseDTO> lista = disciplinaService.listarTodasDisciplina();
-		return ResponseEntity.ok(lista); 
+	public ResponseEntity<Page<DisciplinaResponseDTO>> listarTodasDiscipnas(@RequestParam int pagina,@RequestParam int itens){
+		Page<DisciplinaResponseDTO> lista = disciplinaService.listarTodasDisciplina(pagina, itens);
+		return ResponseEntity.ok(lista);  
 	}
 	
 	@GetMapping("/{idDisciplina}") 

@@ -1,8 +1,13 @@
 package com.ssp.uninoxus.service;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
 import com.ssp.uninoxus.dto.CriarProfessorDTO;
 import com.ssp.uninoxus.dto.ProfessorResponseDTO;
 import com.ssp.uninoxus.entities.Curso;
@@ -28,13 +33,14 @@ public class ProfessorService {
 		return lista; 
 	}
 	
-	public List<ProfessorResponseDTO> listarTodosProfessores(){
-		List<Professor> professores = professorRepository.findAll();
+	public Page<ProfessorResponseDTO> listarTodosProfessores(int pagina, int itens){
+		PageRequest pageRequest = PageRequest.of(pagina, itens);
+		Page<Professor> professores = professorRepository.findAll(pageRequest);
 		List<ProfessorResponseDTO> lista = new ArrayList<>();
 		for(Professor p: professores) {
 			lista.add(toDTO(p));
 		}
-		return lista; 
+		 return new PageImpl<>(lista, pageRequest, professores.getTotalElements());
 	}
 	 
 	public ProfessorResponseDTO adicionar (CriarProfessorDTO dto){

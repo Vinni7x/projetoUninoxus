@@ -246,7 +246,7 @@ public class MatriculaService {
  	 
         matricula.setStatusMatricula(StatusMatricula.MATRICULADO);
         
-        matriculaRepository.save(matricula);  
+        matriculaRepository.save(matricula);   
  }
 		 
 		

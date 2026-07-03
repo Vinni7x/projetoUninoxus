@@ -1,8 +1,13 @@
 package com.ssp.uninoxus.service;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
 import com.ssp.uninoxus.dto.CriarTurmaDTO;
 import com.ssp.uninoxus.dto.TurmaMatriculadoDTO;
 import com.ssp.uninoxus.dto.TurmaMinistradaDTO;
@@ -216,14 +221,15 @@ public class TurmaService {
         }
     }
     	
-	 public List<TurmaResponseDTO> listarTodasTurmas(){
-		 List<Turma> turmas = turmaRepository.findAll();
+	 public Page<TurmaResponseDTO> listarTodasTurmas(int pagina, int itens){
+		 PageRequest pageRequest = PageRequest.of(pagina, itens);
+		 Page<Turma> turmas = turmaRepository.findAll(pageRequest);
 		 List<TurmaResponseDTO> lista = new ArrayList<>();
 		 
 		 for(Turma t: turmas) { 
 			 lista.add(toDTO(t));
 		 }
-		 return lista;
+		 return new PageImpl<>(lista, pageRequest, turmas.getTotalElements());
 	 }
 
     

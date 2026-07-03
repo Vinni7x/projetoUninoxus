@@ -3,6 +3,7 @@ package com.ssp.uninoxus.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,10 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssp.uninoxus.dto.CriarTurmaDTO;
-
 import com.ssp.uninoxus.dto.TurmaMatriculadoDTO;
 import com.ssp.uninoxus.dto.TurmaMinistradaDTO;
 import com.ssp.uninoxus.dto.TurmaResponseDTO;
@@ -39,8 +40,8 @@ public class TurmaController {
 	public ResponseEntity<List<TurmaMatriculadoDTO>> turmasMatriculado(@PathVariable Long matriculaAluno){
 		List<TurmaMatriculadoDTO> lista = turmaService.turmasMatriculado(matriculaAluno);
 		return ResponseEntity.ok(lista); 
-		  
-	}
+		   
+	} 
 	
 	@GetMapping("/{idCurso}/turmasabertas/{matriculaAluno}") 
 	public ResponseEntity<List<TurmaResponseDTO>> turmasAbertas(@PathVariable Long idCurso, @PathVariable Long matriculaAluno ){
@@ -64,9 +65,9 @@ public class TurmaController {
 	
 	
 	@GetMapping
-	public ResponseEntity<List<TurmaResponseDTO>> todosTurmas (){ 
+	public ResponseEntity<Page<TurmaResponseDTO>> todosTurmas (@RequestParam int pagina, @RequestParam int itens){ 
 		
-		List<TurmaResponseDTO> lista = turmaService.listarTodasTurmas();
+		Page<TurmaResponseDTO> lista = turmaService.listarTodasTurmas(pagina, itens);
 		
 		return ResponseEntity.ok(lista);
 		

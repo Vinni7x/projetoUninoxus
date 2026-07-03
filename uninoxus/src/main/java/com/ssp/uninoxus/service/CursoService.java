@@ -3,8 +3,10 @@ package com.ssp.uninoxus.service;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.ssp.uninoxus.dto.CriarCursoDTO;
@@ -19,13 +21,14 @@ public class CursoService {
 	private CursoRepository cursoRepository;
 	
 	
-	public List<CursoResponseDTO> listarTodosCursos() {
-	    List<Curso> cursos = cursoRepository.findAll();
+	public Page<CursoResponseDTO> listarTodosCursos(int pagina, int itens) {
+		PageRequest pageRequest = PageRequest.of(pagina, itens);
+	    Page<Curso> cursos = cursoRepository.findAll(pageRequest);
 	    List<CursoResponseDTO> lista = new ArrayList<>();
 	    for (Curso c : cursos) { 
 	        lista.add(toDTO(c));
 	    }
-	    return lista;
+	    return new PageImpl<>(lista, pageRequest, cursos.getTotalElements());
 	}
 	
 	public CursoResponseDTO adicionar (CriarCursoDTO dto) {

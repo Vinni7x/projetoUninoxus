@@ -1,8 +1,13 @@
 package com.ssp.uninoxus.service;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
 import com.ssp.uninoxus.dto.CriarDisciplinaDTO;
 import com.ssp.uninoxus.dto.DisciplinaResponseDTO;
 import com.ssp.uninoxus.entities.Curso;
@@ -47,14 +52,15 @@ public class DisciplinaService {
 		        return toDTO(disciplina);  
 			}
 		
-		public List<DisciplinaResponseDTO> listarTodasDisciplina (){
-			List<Disciplina> disciplinas = disciplinaRepository.findAll();
+		public Page<DisciplinaResponseDTO> listarTodasDisciplina (int pagina, int itens){
+			PageRequest pageRequest = PageRequest.of(pagina, itens);
+			Page<Disciplina> disciplinas = disciplinaRepository.findAll(pageRequest);
 			 List<DisciplinaResponseDTO> lista = new ArrayList<>();
 			 
-			 for(Disciplina d: disciplinas) {
+			 for(Disciplina d: disciplinas) { 
 				 lista.add(toDTO(d));
 			 }
-			 return lista; 
+			 return new PageImpl<> (lista, pageRequest, disciplinas.getTotalElements()); 
 		}
 		
 		 public DisciplinaResponseDTO listarPorId(Long idDisciplina){ 
