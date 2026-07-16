@@ -2,6 +2,7 @@ package com.ssp.uninoxus.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,5 +49,15 @@ public class CursoController {
 	public ResponseEntity<CursoResponseDTO> buscarporID (@PathVariable Long idCurso){
 		return ResponseEntity.status(200).body(cursoService.listarPorId(idCurso));  
 		
+	}
+	
+	@DeleteMapping( "/{idCurso}")  
+	public  ResponseEntity <Void> deletar (@PathVariable Long idCurso ){
+		try {
+			cursoService.deletar(idCurso);
+			return ResponseEntity.noContent().build(); }
+			catch (RuntimeException e) {
+				return ResponseEntity.notFound().build();
+			}
 	}
 }  
